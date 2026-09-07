@@ -41,7 +41,7 @@ header{
   min-height:74px;
   display:flex;
   align-items:center;
-  justify-content:space-between;
+  justify-content:flex-end;
   padding:10px 5%;
   border-bottom:1px solid #eee;
   position:sticky;
@@ -49,17 +49,6 @@ header{
   background:#fff;
   z-index:20
 }
-
-.brand{
-  display:flex;
-  align-items:center
-}
-
-.brand-text{
-  font:400 24px Georgia,serif;
-  letter-spacing:2px
-}
-
 
 nav{
   display:flex;
@@ -121,7 +110,7 @@ nav button{
 
 .hero{
   text-align:center;
-  padding:65px 20px 45px
+  padding:35px 20px 30px
 }
 
 .hero-logo{
@@ -414,10 +403,6 @@ h3{
     min-height:68px
   }
 
-  .brand-text{
-    font-size:20px
-  }
-
   nav{
     gap:1px
   }
@@ -429,7 +414,7 @@ h3{
   }
 
   .hero{
-    padding-top:55px
+    padding-top:35px
   }
 
   .hero-logo{
@@ -457,18 +442,7 @@ h3{
 
 <header>
 
-
-  <div class="brand">
-
-    <span class="brand-text">
-      Encante
-    </span>
-
-  </div>
-
-
   <nav>
-
 
     <button
       onclick="document.getElementById('ropa').scrollIntoView({behavior:'smooth'})"
@@ -507,9 +481,7 @@ h3{
 
     </button>
 
-
   </nav>
-
 
 </header>
 
@@ -550,7 +522,6 @@ h3{
 
   <section id="ropa">
 
-
     <h2>
       Ropa
     </h2>
@@ -567,7 +538,6 @@ h3{
 
     </div>
 
-
   </section>
 
 
@@ -575,7 +545,6 @@ h3{
   <!-- ACCESORIOS -->
 
   <section id="accesorios">
-
 
     <h2>
       Accesorios
@@ -592,7 +561,6 @@ h3{
       </p>
 
     </div>
-
 
   </section>
 
@@ -613,7 +581,6 @@ h3{
 
   <div class="drawer-head">
 
-
     <h3>
       Tu carrito
     </h3>
@@ -625,7 +592,6 @@ h3{
       ×
     </button>
 
-
   </div>
 
 
@@ -636,7 +602,6 @@ h3{
 
   <div class="total">
 
-
     <span>
       Total
     </span>
@@ -645,7 +610,6 @@ h3{
     <strong id="total">
       $0
     </strong>
-
 
   </div>
 
@@ -689,9 +653,7 @@ let cart=[];
 
 async function loadProducts(){
 
-
   try{
-
 
     const r=await fetch(
       "/api/products",
@@ -716,7 +678,6 @@ async function loadProducts(){
 
   }catch(e){
 
-
     document.getElementById(
       "ropaGrid"
     ).innerHTML=
@@ -731,9 +692,7 @@ async function loadProducts(){
 
     console.error(e);
 
-
   }
-
 
 }
 
@@ -744,7 +703,6 @@ async function loadProducts(){
 ========================= */
 
 function renderProducts(){
-
 
   renderGrid(
     "ropaGrid",
@@ -757,16 +715,29 @@ function renderProducts(){
     products.accesorios || []
   );
 
-
 }
 
 
 
 /* =========================
    CREAR TARJETAS
+   DISPONIBLES PRIMERO
+   AGOTADOS AL FINAL
 ========================= */
 
 function renderGrid(id,arr){
+
+  arr = [...arr].sort((a,b) => {
+
+    const aSold =
+      Number(a.stock) > 0 ? 0 : 1;
+
+    const bSold =
+      Number(b.stock) > 0 ? 0 : 1;
+
+    return aSold - bSold;
+
+  });
 
 
   const grid=document.getElementById(id);
@@ -774,19 +745,15 @@ function renderGrid(id,arr){
 
   if(!arr.length){
 
-
     grid.innerHTML=
       '<p class="empty">No hay productos disponibles.</p>';
 
-
     return;
-
 
   }
 
 
   grid.innerHTML=arr.map(p=>`
-
 
     <article
       class="card"
@@ -823,14 +790,11 @@ function renderGrid(id,arr){
 
       <div class="details">
 
-
         <div>
-
 
           <h3>
             ${escapeHtml(p.name)}
           </h3>
-
 
 
           ${
@@ -840,22 +804,18 @@ function renderGrid(id,arr){
           }
 
 
-
           ${
             Array.isArray(p.colors) && p.colors.length
               ? `<p>Colores: ${escapeHtml(p.colors.join(", "))}</p>`
               : ""
           }
 
-
         </div>
-
 
 
         <strong>
           $${formatPrice(p.price)}
         </strong>
-
 
       </div>
 
@@ -865,13 +825,11 @@ function renderGrid(id,arr){
         class="status ${p.stock>0?"":"sold"}"
       >
 
-
         ${
           p.stock>0
             ? "DISPONIBLE"
             : "AGOTADO"
         }
-
 
       </div>
 
@@ -879,19 +837,16 @@ function renderGrid(id,arr){
 
       <div class="actions">
 
-
         <button
           ${p.stock>0?"":"disabled"}
           onclick="addToCart(this)"
         >
-
 
           ${
             p.stock>0
               ? "Agregar al carrito"
               : "Agotado"
           }
-
 
         </button>
 
@@ -907,15 +862,12 @@ function renderGrid(id,arr){
 
         </button>
 
-
       </div>
 
 
     </article>
 
-
   `).join("");
-
 
 }
 
@@ -927,14 +879,11 @@ function renderGrid(id,arr){
 
 function formatPrice(value){
 
-
   const n=Number(value)||0;
-
 
   return Number.isInteger(n)
     ? String(n)
     : n.toFixed(2);
-
 
 }
 
@@ -945,7 +894,6 @@ function formatPrice(value){
 ========================= */
 
 function escapeHtml(v){
-
 
   return String(v??"").replace(
     /[&<>"']/g,
@@ -962,7 +910,6 @@ function escapeHtml(v){
 
   );
 
-
 }
 
 
@@ -973,27 +920,20 @@ function escapeHtml(v){
 
 function getP(btn){
 
-
   const c=btn.closest(".card");
 
 
   return{
 
-
     name:c.dataset.name,
-
 
     meta:c.dataset.meta,
 
-
     price:+c.dataset.price,
-
 
     img:c.dataset.img
 
-
   };
-
 
 }
 
@@ -1004,7 +944,6 @@ function getP(btn){
 ========================= */
 
 function addToCart(btn){
-
 
   const p=getP(btn);
 
@@ -1019,24 +958,18 @@ function addToCart(btn){
 
   if(x){
 
-
     x.qty++;
-
 
   }else{
 
-
     p.qty=1;
 
-
     cart.push(p);
-
 
   }
 
 
   renderCart();
-
 
 }
 
@@ -1044,23 +977,47 @@ function addToCart(btn){
 
 /* =========================
    COMPRAR POR WHATSAPP
+   INCLUYE ENLACE A LA FOTO
 ========================= */
 
 function buyWA(btn){
 
-
   const p=getP(btn);
 
 
-  const m=
-    `Hola Encante 💜 Quisiera comprar: ${p.name}${p.meta?" ("+p.meta+")":""} — $${formatPrice(p.price)}. ¿Está disponible?`;
+  let m=
+    `Hola Encante 💜 Quisiera comprar:\n\n` +
+    `${p.name}`;
+
+
+  if(p.meta){
+
+    m+=
+      `\n${p.meta}`;
+
+  }
+
+
+  m+=
+    `\nPrecio: $${formatPrice(p.price)}`;
+
+
+  if(p.img){
+
+    m+=
+      `\n\n📸 Foto del producto:\n${p.img}`;
+
+  }
+
+
+  m+=
+    `\n\n¿Está disponible?`;
 
 
   window.open(
     "https://wa.me/"+WA+"?text="+encodeURIComponent(m),
     "_blank"
   );
-
 
 }
 
@@ -1072,14 +1029,12 @@ function buyWA(btn){
 
 function toggleCart(){
 
-
   document
     .getElementById("drawer")
     .classList.toggle("open");
 
 
   renderCart();
-
 
 }
 
@@ -1091,12 +1046,9 @@ function toggleCart(){
 
 function removeItem(i){
 
-
   cart.splice(i,1);
 
-
   renderCart();
-
 
 }
 
@@ -1107,7 +1059,6 @@ function removeItem(i){
 ========================= */
 
 function renderCart(){
-
 
   document.getElementById(
     "count"
@@ -1125,7 +1076,6 @@ function renderCart(){
 
   if(!cart.length){
 
-
     b.innerHTML=
       '<p style="text-align:center;color:#777;margin-top:45px;font:15px Georgia,serif">Tu carrito está vacío ✨</p>';
 
@@ -1137,13 +1087,11 @@ function renderCart(){
 
     return;
 
-
   }
 
 
 
   b.innerHTML=cart.map((x,i)=>`
-
 
     <div class="item">
 
@@ -1166,11 +1114,9 @@ function renderCart(){
 
       <div>
 
-
         <strong>
           ${escapeHtml(x.name)}
         </strong>
-
 
 
         ${
@@ -1178,7 +1124,6 @@ function renderCart(){
             ? `<small>${escapeHtml(x.meta)}</small>`
             : ""
         }
-
 
 
         <small>
@@ -1199,9 +1144,7 @@ function renderCart(){
 
     </div>
 
-
   `).join("");
-
 
 
   document.getElementById(
@@ -1215,25 +1158,50 @@ function renderCart(){
       )
       .toFixed(2);
 
-
 }
 
 
 
 /* =========================
    FINALIZAR PEDIDO
+   INCLUYE ENLACES A LAS FOTOS
 ========================= */
 
 function checkout(){
-
 
   if(!cart.length)return;
 
 
   const lines=
-    cart.map(x=>
-      `• ${x.name}${x.meta?" ("+x.meta+")":""} — $${formatPrice(x.price)} × ${x.qty}`
-    ).join("\n");
+    cart.map(x=>{
+
+      let line=
+        `• ${x.name}`;
+
+
+      if(x.meta){
+
+        line+=
+          ` (${x.meta})`;
+
+      }
+
+
+      line+=
+        ` — $${formatPrice(x.price)} × ${x.qty}`;
+
+
+      if(x.img){
+
+        line+=
+          `\n  📸 Foto: ${x.img}`;
+
+      }
+
+
+      return line;
+
+    }).join("\n\n");
 
 
   const t=
@@ -1246,14 +1214,15 @@ function checkout(){
 
 
   const m=
-    `Hola Encante 💜 Quisiera realizar este pedido:\n\n${lines}\n\nTotal: $${t}`;
+    `Hola Encante 💜 Quisiera realizar este pedido:\n\n` +
+    `${lines}\n\n` +
+    `Total: $${t}`;
 
 
   window.open(
     "https://wa.me/"+WA+"?text="+encodeURIComponent(m),
     "_blank"
   );
-
 
 }
 

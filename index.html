@@ -38,11 +38,11 @@ body{
 ========================= */
 
 header{
-  min-height:74px;
+  min-height:68px;
   display:flex;
   align-items:center;
   justify-content:flex-end;
-  padding:10px 5%;
+  padding:8px 5%;
   border-bottom:1px solid #eee;
   position:sticky;
   top:0;
@@ -110,7 +110,8 @@ nav button{
 
 .hero{
   text-align:center;
-  padding:35px 20px 30px
+  padding:20px 20px 18px;
+  overflow:hidden
 }
 
 .hero-logo{
@@ -118,7 +119,9 @@ nav button{
   max-width:70%;
   height:auto;
   display:block;
-  margin:0 auto 16px
+  margin:-5px auto 0;
+  position:relative;
+  top:-2px
 }
 
 .hero p{
@@ -139,7 +142,7 @@ main{
 }
 
 section{
-  padding-top:30px;
+  padding-top:18px;
   margin-bottom:55px
 }
 
@@ -400,7 +403,7 @@ h3{
 
   header{
     padding:8px 4%;
-    min-height:68px
+    min-height:64px
   }
 
   nav{
@@ -414,16 +417,21 @@ h3{
   }
 
   .hero{
-    padding-top:35px
+    padding:14px 20px 12px
   }
 
   .hero-logo{
     width:190px;
-    max-width:75%
+    max-width:75%;
+    margin:-4px auto 0
   }
 
   .grid{
     gap:15px
+  }
+
+  section{
+    padding-top:14px
   }
 
 }
@@ -493,7 +501,6 @@ h3{
 
 <div class="hero">
 
-
   <img
     class="hero-logo"
     src="logo.webp"
@@ -501,11 +508,9 @@ h3{
     onerror="this.style.display='none'"
   >
 
-
   <p>
     Un toque de magia en cada look
   </p>
-
 
 </div>
 
@@ -727,20 +732,21 @@ function renderProducts(){
 
 function renderGrid(id,arr){
 
-  arr = [...arr].sort((a,b) => {
+  arr=[...arr].sort((a,b)=>{
 
-    const aSold =
-      Number(a.stock) > 0 ? 0 : 1;
+    const aSold=
+      Number(a.stock)>0 ? 0 : 1;
 
-    const bSold =
-      Number(b.stock) > 0 ? 0 : 1;
+    const bSold=
+      Number(b.stock)>0 ? 0 : 1;
 
-    return aSold - bSold;
+    return aSold-bSold;
 
   });
 
 
-  const grid=document.getElementById(id);
+  const grid=
+    document.getElementById(id);
 
 
   if(!arr.length){
@@ -757,8 +763,6 @@ function renderGrid(id,arr){
 
     <article
       class="card"
-
-      data-name="${escapeHtml(p.name)}"
 
       data-meta="${escapeHtml(
         Array.isArray(p.colors)
@@ -778,7 +782,7 @@ function renderGrid(id,arr){
         ? `<img
             class="card-img"
             src="${escapeHtml(p.image)}"
-            alt="${escapeHtml(p.name)}"
+            alt=""
             loading="lazy"
             onerror="this.style.display='none'"
           >`
@@ -791,10 +795,6 @@ function renderGrid(id,arr){
       <div class="details">
 
         <div>
-
-          <h3>
-            ${escapeHtml(p.name)}
-          </h3>
 
 
           ${
@@ -881,6 +881,7 @@ function formatPrice(value){
 
   const n=Number(value)||0;
 
+
   return Number.isInteger(n)
     ? String(n)
     : n.toFixed(2);
@@ -925,8 +926,6 @@ function getP(btn){
 
   return{
 
-    name:c.dataset.name,
-
     meta:c.dataset.meta,
 
     price:+c.dataset.price,
@@ -950,9 +949,9 @@ function addToCart(btn){
 
   const x=cart.find(
     i=>
-      i.name===p.name &&
       i.price===p.price &&
-      i.meta===p.meta
+      i.meta===p.meta &&
+      i.img===p.img
   );
 
 
@@ -976,8 +975,7 @@ function addToCart(btn){
 
 
 /* =========================
-   COMPRAR POR WHATSAPP
-   INCLUYE ENLACE A LA FOTO
+   WHATSAPP INDIVIDUAL
 ========================= */
 
 function buyWA(btn){
@@ -986,32 +984,20 @@ function buyWA(btn){
 
 
   let m=
-    `Hola Encante 💜 Quisiera comprar:\n\n` +
-    `${p.name}`;
+    `Hola 💜 Quisiera comprar:\n` +
+    `📸 Adjunta una captura del producto\n`;
 
 
   if(p.meta){
 
     m+=
-      `\n${p.meta}`;
+      `${p.meta}\n`;
 
   }
 
 
   m+=
-    `\nPrecio: $${formatPrice(p.price)}`;
-
-
-  if(p.img){
-
-    m+=
-      `\n\n📸 Foto del producto:\n${p.img}`;
-
-  }
-
-
-  m+=
-    `\n\n¿Está disponible?`;
+    `Precio: $${formatPrice(p.price)}`;
 
 
   window.open(
@@ -1069,9 +1055,8 @@ function renderCart(){
     );
 
 
-  const b=document.getElementById(
-    "items"
-  );
+  const b=
+    document.getElementById("items");
 
 
   if(!cart.length){
@@ -1114,10 +1099,6 @@ function renderCart(){
 
       <div>
 
-        <strong>
-          ${escapeHtml(x.name)}
-        </strong>
-
 
         ${
           x.meta
@@ -1153,7 +1134,8 @@ function renderCart(){
     "$"+
     cart
       .reduce(
-        (s,x)=>s+x.price*x.qty,
+        (s,x)=>
+          s+x.price*x.qty,
         0
       )
       .toFixed(2);
@@ -1164,7 +1146,7 @@ function renderCart(){
 
 /* =========================
    FINALIZAR PEDIDO
-   INCLUYE ENLACES A LAS FOTOS
+   MISMO ESTILO QUE WHATSAPP
 ========================= */
 
 function checkout(){
@@ -1176,27 +1158,19 @@ function checkout(){
     cart.map(x=>{
 
       let line=
-        `• ${x.name}`;
+        `📸 Adjunta una captura del producto`;
 
 
       if(x.meta){
 
         line+=
-          ` (${x.meta})`;
+          `\n${x.meta}`;
 
       }
 
 
       line+=
-        ` — $${formatPrice(x.price)} × ${x.qty}`;
-
-
-      if(x.img){
-
-        line+=
-          `\n  📸 Foto: ${x.img}`;
-
-      }
+        `\nPrecio: $${formatPrice(x.price)} × ${x.qty}`;
 
 
       return line;
@@ -1207,14 +1181,15 @@ function checkout(){
   const t=
     cart
       .reduce(
-        (s,x)=>s+x.price*x.qty,
+        (s,x)=>
+          s+x.price*x.qty,
         0
       )
       .toFixed(2);
 
 
   const m=
-    `Hola Encante 💜 Quisiera realizar este pedido:\n\n` +
+    `Hola 💜 Quisiera realizar este pedido:\n\n` +
     `${lines}\n\n` +
     `Total: $${t}`;
 
@@ -1251,4 +1226,4 @@ renderCart();
 
 </body>
 
-</html>
+  </html>

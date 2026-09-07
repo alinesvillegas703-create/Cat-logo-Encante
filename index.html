@@ -41,7 +41,7 @@ header{
   min-height:74px;
   display:flex;
   align-items:center;
-  justify-content:flex-end;
+  justify-content:space-between;
   padding:10px 5%;
   border-bottom:1px solid #eee;
   position:sticky;
@@ -49,6 +49,17 @@ header{
   background:#fff;
   z-index:20
 }
+
+.brand{
+  display:flex;
+  align-items:center
+}
+
+.brand-text{
+  font:400 24px Georgia,serif;
+  letter-spacing:2px
+}
+
 
 nav{
   display:flex;
@@ -110,7 +121,7 @@ nav button{
 
 .hero{
   text-align:center;
-  padding:38px 20px 38px
+  padding:65px 20px 45px
 }
 
 .hero-logo{
@@ -118,7 +129,7 @@ nav button{
   max-width:70%;
   height:auto;
   display:block;
-  margin:0 auto 12px
+  margin:0 auto 16px
 }
 
 .hero p{
@@ -139,7 +150,7 @@ main{
 }
 
 section{
-  padding-top:20px;
+  padding-top:30px;
   margin-bottom:55px
 }
 
@@ -160,8 +171,7 @@ h2{
 }
 
 .card{
-  min-width:0;
-  cursor:pointer
+  min-width:0
 }
 
 .card img{
@@ -178,10 +188,6 @@ h2{
   object-fit:cover;
   background:#f6f4f7;
   display:block
-}
-
-.card:hover .card-img{
-  opacity:.94
 }
 
 
@@ -272,138 +278,6 @@ h3{
 
 
 /* =========================
-   PRODUCT MODAL
-========================= */
-
-.product-modal{
-  position:fixed;
-  inset:0;
-  background:#0008;
-  z-index:100;
-  display:none;
-  align-items:center;
-  justify-content:center;
-  padding:20px
-}
-
-.product-modal.open{
-  display:flex
-}
-
-.product-box{
-  position:relative;
-  width:min(900px,96vw);
-  max-height:92vh;
-  overflow:auto;
-  background:#fff;
-  display:grid;
-  grid-template-columns:1.1fr .9fr
-}
-
-.product-image-wrap{
-  background:#f6f4f7;
-  min-height:500px;
-  display:flex;
-  align-items:center;
-  justify-content:center
-}
-
-.product-image{
-  width:100%;
-  height:100%;
-  max-height:75vh;
-  object-fit:contain;
-  display:block
-}
-
-.product-info{
-  padding:42px 35px;
-  display:flex;
-  flex-direction:column;
-  justify-content:center
-}
-
-.product-info h2{
-  font:400 30px Georgia,serif;
-  margin:0 0 10px
-}
-
-.product-type{
-  color:#777;
-  font-size:11px;
-  margin:0 0 8px
-}
-
-.product-colors{
-  color:#777;
-  font-size:11px;
-  line-height:1.6;
-  margin:0 0 20px
-}
-
-.product-price{
-  font-size:20px;
-  margin-bottom:10px
-}
-
-.product-status{
-  font-size:9px;
-  letter-spacing:1px;
-  color:#438354;
-  margin-bottom:25px
-}
-
-.product-status.sold{
-  color:#999
-}
-
-.product-actions{
-  display:flex;
-  flex-direction:column;
-  gap:8px
-}
-
-.product-actions button{
-  width:100%;
-  padding:13px;
-  border:1px solid #4c2fc5;
-  background:#4c2fc5;
-  color:#fff;
-  font-size:9px;
-  letter-spacing:1px;
-  text-transform:uppercase;
-  cursor:pointer
-}
-
-.product-actions .wa{
-  background:#fff;
-  color:#4c2fc5
-}
-
-.product-actions button:disabled{
-  background:#eee;
-  border-color:#eee;
-  color:#999;
-  cursor:not-allowed
-}
-
-.close-modal{
-  position:absolute;
-  top:12px;
-  right:15px;
-  width:34px;
-  height:34px;
-  border:0;
-  border-radius:50%;
-  background:#fff;
-  box-shadow:0 2px 10px #0002;
-  font-size:22px;
-  cursor:pointer;
-  z-index:5
-}
-
-
-/* =========================
    CART DRAWER
 ========================= */
 
@@ -414,7 +288,7 @@ h3{
   height:100%;
   width:min(420px,92vw);
   background:#fff;
-  z-index:150;
+  z-index:50;
   box-shadow:-10px 0 30px #0002;
   transform:translateX(100%);
   transition:.25s;
@@ -526,24 +400,6 @@ h3{
     grid-template-columns:repeat(2,1fr)
   }
 
-  .product-box{
-    grid-template-columns:1fr;
-    max-width:520px
-  }
-
-  .product-image-wrap{
-    min-height:360px;
-    max-height:52vh
-  }
-
-  .product-image{
-    max-height:52vh
-  }
-
-  .product-info{
-    padding:25px
-  }
-
 }
 
 
@@ -558,6 +414,10 @@ h3{
     min-height:68px
   }
 
+  .brand-text{
+    font-size:20px
+  }
+
   nav{
     gap:1px
   }
@@ -569,7 +429,7 @@ h3{
   }
 
   .hero{
-    padding:30px 20px 28px
+    padding-top:55px
   }
 
   .hero-logo{
@@ -581,41 +441,6 @@ h3{
     gap:15px
   }
 
-  h2{
-    font-size:28px
-  }
-
-  .product-modal{
-    padding:10px
-  }
-
-  .product-box{
-    width:96vw;
-    max-height:94vh
-  }
-
-  .product-image-wrap{
-    min-height:300px;
-    max-height:45vh
-  }
-
-  .product-info{
-    padding:22px
-  }
-
-  .product-info h2{
-    font-size:25px
-  }
-
-}
-
-
-/* =========================
-   PREVENIR SCROLL
-========================= */
-
-body.modal-open{
-  overflow:hidden
 }
 
 </style>
@@ -632,7 +457,18 @@ body.modal-open{
 
 <header>
 
+
+  <div class="brand">
+
+    <span class="brand-text">
+      Encante
+    </span>
+
+  </div>
+
+
   <nav>
+
 
     <button
       onclick="document.getElementById('ropa').scrollIntoView({behavior:'smooth'})"
@@ -640,11 +476,13 @@ body.modal-open{
       Ropa
     </button>
 
+
     <button
       onclick="document.getElementById('accesorios').scrollIntoView({behavior:'smooth'})"
     >
       Accesorios
     </button>
+
 
     <a
       class="instagram"
@@ -654,6 +492,7 @@ body.modal-open{
     >
       @encante.ve
     </a>
+
 
     <button
       class="cart"
@@ -668,7 +507,9 @@ body.modal-open{
 
     </button>
 
+
   </nav>
+
 
 </header>
 
@@ -680,6 +521,7 @@ body.modal-open{
 
 <div class="hero">
 
+
   <img
     class="hero-logo"
     src="logo.webp"
@@ -687,9 +529,11 @@ body.modal-open{
     onerror="this.style.display='none'"
   >
 
+
   <p>
     Un toque de magia en cada look
   </p>
+
 
 </div>
 
@@ -706,9 +550,11 @@ body.modal-open{
 
   <section id="ropa">
 
+
     <h2>
       Ropa
     </h2>
+
 
     <div
       class="grid"
@@ -721,6 +567,7 @@ body.modal-open{
 
     </div>
 
+
   </section>
 
 
@@ -729,9 +576,11 @@ body.modal-open{
 
   <section id="accesorios">
 
+
     <h2>
       Accesorios
     </h2>
+
 
     <div
       class="grid"
@@ -744,108 +593,11 @@ body.modal-open{
 
     </div>
 
+
   </section>
 
 
 </main>
-
-
-
-<!-- =========================
-     PRODUCT MODAL
-========================= -->
-
-<div
-  id="productModal"
-  class="product-modal"
-  onclick="closeProductOutside(event)"
->
-
-  <div
-    class="product-box"
-    onclick="event.stopPropagation()"
-  >
-
-    <button
-      class="close-modal"
-      onclick="closeProduct()"
-    >
-      ×
-    </button>
-
-
-    <div class="product-image-wrap">
-
-      <img
-        id="modalImage"
-        class="product-image"
-        src=""
-        alt=""
-      >
-
-    </div>
-
-
-    <div class="product-info">
-
-      <h2 id="modalName">
-        Producto
-      </h2>
-
-
-      <p
-        id="modalType"
-        class="product-type"
-      ></p>
-
-
-      <p
-        id="modalColors"
-        class="product-colors"
-      ></p>
-
-
-      <strong
-        id="modalPrice"
-        class="product-price"
-      >
-        $0
-      </strong>
-
-
-      <div
-        id="modalStatus"
-        class="product-status"
-      >
-        DISPONIBLE
-      </div>
-
-
-      <div class="product-actions">
-
-        <button
-          id="modalCartButton"
-          onclick="addModalToCart()"
-        >
-          Agregar al carrito
-        </button>
-
-
-        <button
-          id="modalWAButton"
-          class="wa"
-          onclick="buyModalWA()"
-        >
-          WhatsApp
-        </button>
-
-      </div>
-
-    </div>
-
-  </div>
-
-</div>
 
 
 
@@ -858,11 +610,14 @@ body.modal-open{
   class="drawer"
 >
 
+
   <div class="drawer-head">
+
 
     <h3>
       Tu carrito
     </h3>
+
 
     <button
       onclick="toggleCart()"
@@ -870,23 +625,30 @@ body.modal-open{
       ×
     </button>
 
+
   </div>
+
 
 
   <div id="items"></div>
 
 
+
   <div class="total">
+
 
     <span>
       Total
     </span>
 
+
     <strong id="total">
       $0
     </strong>
 
+
   </div>
+
 
 
   <button
@@ -895,6 +657,7 @@ body.modal-open{
   >
     Comprar por WhatsApp
   </button>
+
 
 </aside>
 
@@ -919,11 +682,6 @@ let products={
 let cart=[];
 
 
-/* Producto actualmente abierto */
-
-let selectedProduct=null;
-
-
 
 /* =========================
    CARGAR PRODUCTOS
@@ -931,12 +689,15 @@ let selectedProduct=null;
 
 async function loadProducts(){
 
+
   try{
+
 
     const r=await fetch(
       "/api/products",
       {cache:"no-store"}
     );
+
 
     if(!r.ok){
 
@@ -946,25 +707,33 @@ async function loadProducts(){
 
     }
 
+
     products=await r.json();
+
 
     renderProducts();
 
+
   }catch(e){
+
 
     document.getElementById(
       "ropaGrid"
     ).innerHTML=
       '<p class="empty">No se pudo cargar el catálogo.</p>';
 
+
     document.getElementById(
       "accGrid"
     ).innerHTML=
       '<p class="empty">No se pudo cargar el catálogo.</p>';
 
+
     console.error(e);
 
+
   }
+
 
 }
 
@@ -976,15 +745,18 @@ async function loadProducts(){
 
 function renderProducts(){
 
+
   renderGrid(
     "ropaGrid",
     products.ropa || []
   );
 
+
   renderGrid(
     "accGrid",
     products.accesorios || []
   );
+
 
 }
 
@@ -996,26 +768,30 @@ function renderProducts(){
 
 function renderGrid(id,arr){
 
+
   const grid=document.getElementById(id);
 
+
   if(!arr.length){
+
 
     grid.innerHTML=
       '<p class="empty">No hay productos disponibles.</p>';
 
+
     return;
+
 
   }
 
 
   grid.innerHTML=arr.map(p=>`
 
+
     <article
       class="card"
 
       data-name="${escapeHtml(p.name)}"
-
-      data-type="${escapeHtml(p.type||"")}"
 
       data-meta="${escapeHtml(
         Array.isArray(p.colors)
@@ -1025,11 +801,7 @@ function renderGrid(id,arr){
 
       data-price="${Number(p.price)||0}"
 
-      data-stock="${Number(p.stock)||0}"
-
       data-img="${escapeHtml(p.image||"")}"
-
-      onclick="openProduct(this)"
     >
 
 
@@ -1051,11 +823,14 @@ function renderGrid(id,arr){
 
       <div class="details">
 
+
         <div>
+
 
           <h3>
             ${escapeHtml(p.name)}
           </h3>
+
 
 
           ${
@@ -1065,18 +840,22 @@ function renderGrid(id,arr){
           }
 
 
+
           ${
             Array.isArray(p.colors) && p.colors.length
               ? `<p>Colores: ${escapeHtml(p.colors.join(", "))}</p>`
               : ""
           }
 
+
         </div>
+
 
 
         <strong>
           $${formatPrice(p.price)}
         </strong>
+
 
       </div>
 
@@ -1086,11 +865,13 @@ function renderGrid(id,arr){
         class="status ${p.stock>0?"":"sold"}"
       >
 
+
         ${
           p.stock>0
             ? "DISPONIBLE"
             : "AGOTADO"
         }
+
 
       </div>
 
@@ -1098,11 +879,407 @@ function renderGrid(id,arr){
 
       <div class="actions">
 
+
         <button
           ${p.stock>0?"":"disabled"}
-          onclick="event.stopPropagation(); addToCart(this)"
+          onclick="addToCart(this)"
         >
+
 
           ${
             p.stock>0
-              ? "Agregar al carrito
+              ? "Agregar al carrito"
+              : "Agotado"
+          }
+
+
+        </button>
+
+
+
+        <button
+          class="wa"
+          ${p.stock>0?"":"disabled"}
+          onclick="buyWA(this)"
+        >
+
+          WhatsApp
+
+        </button>
+
+
+      </div>
+
+
+    </article>
+
+
+  `).join("");
+
+
+}
+
+
+
+/* =========================
+   FORMATO DE PRECIO
+========================= */
+
+function formatPrice(value){
+
+
+  const n=Number(value)||0;
+
+
+  return Number.isInteger(n)
+    ? String(n)
+    : n.toFixed(2);
+
+
+}
+
+
+
+/* =========================
+   SEGURIDAD HTML
+========================= */
+
+function escapeHtml(v){
+
+
+  return String(v??"").replace(
+    /[&<>"']/g,
+
+    m=>({
+
+      "&":"&amp;",
+      "<":"&lt;",
+      ">":"&gt;",
+      '"':"&quot;",
+      "'":"&#039;"
+
+    }[m])
+
+  );
+
+
+}
+
+
+
+/* =========================
+   OBTENER PRODUCTO
+========================= */
+
+function getP(btn){
+
+
+  const c=btn.closest(".card");
+
+
+  return{
+
+
+    name:c.dataset.name,
+
+
+    meta:c.dataset.meta,
+
+
+    price:+c.dataset.price,
+
+
+    img:c.dataset.img
+
+
+  };
+
+
+}
+
+
+
+/* =========================
+   AGREGAR AL CARRITO
+========================= */
+
+function addToCart(btn){
+
+
+  const p=getP(btn);
+
+
+  const x=cart.find(
+    i=>
+      i.name===p.name &&
+      i.price===p.price &&
+      i.meta===p.meta
+  );
+
+
+  if(x){
+
+
+    x.qty++;
+
+
+  }else{
+
+
+    p.qty=1;
+
+
+    cart.push(p);
+
+
+  }
+
+
+  renderCart();
+
+
+}
+
+
+
+/* =========================
+   COMPRAR POR WHATSAPP
+========================= */
+
+function buyWA(btn){
+
+
+  const p=getP(btn);
+
+
+  const m=
+    `Hola Encante 💜 Quisiera comprar: ${p.name}${p.meta?" ("+p.meta+")":""} — $${formatPrice(p.price)}. ¿Está disponible?`;
+
+
+  window.open(
+    "https://wa.me/"+WA+"?text="+encodeURIComponent(m),
+    "_blank"
+  );
+
+
+}
+
+
+
+/* =========================
+   ABRIR / CERRAR CARRITO
+========================= */
+
+function toggleCart(){
+
+
+  document
+    .getElementById("drawer")
+    .classList.toggle("open");
+
+
+  renderCart();
+
+
+}
+
+
+
+/* =========================
+   QUITAR PRODUCTO
+========================= */
+
+function removeItem(i){
+
+
+  cart.splice(i,1);
+
+
+  renderCart();
+
+
+}
+
+
+
+/* =========================
+   MOSTRAR CARRITO
+========================= */
+
+function renderCart(){
+
+
+  document.getElementById(
+    "count"
+  ).textContent=
+    cart.reduce(
+      (s,x)=>s+x.qty,
+      0
+    );
+
+
+  const b=document.getElementById(
+    "items"
+  );
+
+
+  if(!cart.length){
+
+
+    b.innerHTML=
+      '<p style="text-align:center;color:#777;margin-top:45px;font:15px Georgia,serif">Tu carrito está vacío ✨</p>';
+
+
+    document.getElementById(
+      "total"
+    ).textContent="$0";
+
+
+    return;
+
+
+  }
+
+
+
+  b.innerHTML=cart.map((x,i)=>`
+
+
+    <div class="item">
+
+
+      ${
+        x.img
+
+        ? `<img
+            src="${escapeHtml(x.img)}"
+            alt=""
+            style="width:58px;height:72px;object-fit:cover"
+          >`
+
+        : `<div
+            style="width:58px;height:72px;background:#f6f4f7"
+          ></div>`
+      }
+
+
+
+      <div>
+
+
+        <strong>
+          ${escapeHtml(x.name)}
+        </strong>
+
+
+
+        ${
+          x.meta
+            ? `<small>${escapeHtml(x.meta)}</small>`
+            : ""
+        }
+
+
+
+        <small>
+          $${formatPrice(x.price)} × ${x.qty}
+        </small>
+
+
+      </div>
+
+
+
+      <button
+        onclick="removeItem(${i})"
+      >
+        Quitar
+      </button>
+
+
+    </div>
+
+
+  `).join("");
+
+
+
+  document.getElementById(
+    "total"
+  ).textContent=
+    "$"+
+    cart
+      .reduce(
+        (s,x)=>s+x.price*x.qty,
+        0
+      )
+      .toFixed(2);
+
+
+}
+
+
+
+/* =========================
+   FINALIZAR PEDIDO
+========================= */
+
+function checkout(){
+
+
+  if(!cart.length)return;
+
+
+  const lines=
+    cart.map(x=>
+      `• ${x.name}${x.meta?" ("+x.meta+")":""} — $${formatPrice(x.price)} × ${x.qty}`
+    ).join("\n");
+
+
+  const t=
+    cart
+      .reduce(
+        (s,x)=>s+x.price*x.qty,
+        0
+      )
+      .toFixed(2);
+
+
+  const m=
+    `Hola Encante 💜 Quisiera realizar este pedido:\n\n${lines}\n\nTotal: $${t}`;
+
+
+  window.open(
+    "https://wa.me/"+WA+"?text="+encodeURIComponent(m),
+    "_blank"
+  );
+
+
+}
+
+
+
+/* =========================
+   INICIO
+========================= */
+
+loadProducts();
+
+
+/* Actualización automática
+   cada 60 segundos */
+
+setInterval(
+  loadProducts,
+  60000
+);
+
+
+renderCart();
+
+</script>
+
+
+</body>
+
+</html>

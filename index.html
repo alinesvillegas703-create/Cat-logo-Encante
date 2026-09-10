@@ -1,19 +1,60 @@
 <!doctype html>
 <html lang="es">
+
 <head>
+
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Encante — Un toque de magia en cada look</title>
+
+<meta
+  name="viewport"
+  content="width=device-width,initial-scale=1"
+>
+
+<!-- Forzar siempre modo claro -->
+<meta name="color-scheme" content="light">
+<meta name="supported-color-schemes" content="light">
+
+<title>
+  Encante — Un toque de magia en cada look
+</title>
+
 
 <style>
-*{box-sizing:border-box}
+
+/* =========================
+   FORZAR TEMA CLARO
+========================= */
+
+:root{
+  color-scheme:light only;
+}
+
+
+/* =========================
+   GENERAL
+========================= */
+
+*{
+  box-sizing:border-box
+}
+
+html{
+  color-scheme:light only;
+  background:#fff
+}
 
 body{
   margin:0;
   color:#29242b;
   background:#fff;
-  font-family:Arial,sans-serif
+  font-family:Arial,sans-serif;
+  color-scheme:light only
 }
+
+
+/* =========================
+   HEADER
+========================= */
 
 header{
   min-height:68px;
@@ -36,12 +77,16 @@ nav{
 
 nav button{
   border:0;
-  background:none;
+  background:#fff;
+  color:#29242b;
   font-size:10px;
   letter-spacing:1px;
   cursor:pointer;
   padding:9px
 }
+
+
+/* Instagram */
 
 .instagram{
   color:#29242b;
@@ -55,6 +100,9 @@ nav button{
 .instagram:hover{
   opacity:.65
 }
+
+
+/* Carrito */
 
 .cart{
   border:1px solid #ddd!important;
@@ -75,10 +123,16 @@ nav button{
   font-size:9px
 }
 
+
+/* =========================
+   HERO
+========================= */
+
 .hero{
   text-align:center;
   padding:20px 20px 18px;
-  overflow:hidden
+  overflow:hidden;
+  background:#fff
 }
 
 .hero-logo{
@@ -97,10 +151,16 @@ nav button{
   font-size:12px
 }
 
+
+/* =========================
+   MAIN
+========================= */
+
 main{
   max-width:1220px;
   margin:auto;
-  padding:0 5% 80px
+  padding:0 5% 80px;
+  background:#fff
 }
 
 section{
@@ -110,8 +170,14 @@ section{
 
 h2{
   font:400 31px Georgia,serif;
-  margin:0 0 22px
+  margin:0 0 22px;
+  color:#29242b
 }
+
+
+/* =========================
+   PRODUCT GRID
+========================= */
 
 .grid{
   display:grid;
@@ -120,7 +186,8 @@ h2{
 }
 
 .card{
-  min-width:0
+  min-width:0;
+  background:#fff
 }
 
 .card img{
@@ -139,6 +206,11 @@ h2{
   display:block
 }
 
+
+/* =========================
+   PRODUCT DETAILS
+========================= */
+
 .details{
   display:flex;
   justify-content:space-between;
@@ -149,7 +221,8 @@ h2{
 h3{
   font-size:12px;
   font-weight:500;
-  margin:0 0 5px
+  margin:0 0 5px;
+  color:#29242b
 }
 
 .details p{
@@ -160,8 +233,14 @@ h3{
 
 .details strong{
   font-size:12px;
-  white-space:nowrap
+  white-space:nowrap;
+  color:#29242b
 }
+
+
+/* =========================
+   AVAILABILITY
+========================= */
 
 .status{
   display:inline-block;
@@ -174,6 +253,11 @@ h3{
 .status.sold{
   color:#999
 }
+
+
+/* =========================
+   BUTTONS
+========================= */
 
 .actions{
   display:flex;
@@ -210,6 +294,11 @@ h3{
   font-size:11px
 }
 
+
+/* =========================
+   CART DRAWER
+========================= */
+
 .drawer{
   position:fixed;
   right:0;
@@ -223,7 +312,9 @@ h3{
   transition:.25s;
   padding:25px;
   display:flex;
-  flex-direction:column
+  flex-direction:column;
+  color:#29242b;
+  color-scheme:light only
 }
 
 .drawer.open{
@@ -240,12 +331,14 @@ h3{
 
 .drawer-head h3{
   font:400 26px Georgia,serif;
-  margin:0
+  margin:0;
+  color:#29242b
 }
 
 .drawer-head button{
   border:0;
-  background:none;
+  background:#fff;
+  color:#29242b;
   font-size:22px;
   cursor:pointer
 }
@@ -254,6 +347,9 @@ h3{
   overflow:auto;
   flex:1
 }
+
+
+/* Cart items */
 
 .item{
   display:grid;
@@ -271,7 +367,8 @@ h3{
 }
 
 .item strong{
-  font-size:11px
+  font-size:11px;
+  color:#29242b
 }
 
 .item small{
@@ -283,19 +380,26 @@ h3{
 
 .item button{
   border:0;
-  background:none;
+  background:#fff;
   color:#888;
   font-size:9px;
   cursor:pointer
 }
+
+
+/* Total */
 
 .total{
   display:flex;
   justify-content:space-between;
   padding-top:15px;
   border-top:1px solid #ddd;
-  font-size:12px
+  font-size:12px;
+  color:#29242b
 }
+
+
+/* Checkout */
 
 .checkout{
   margin-top:12px;
@@ -309,11 +413,23 @@ h3{
   cursor:pointer
 }
 
+
+/* =========================
+   TABLET
+========================= */
+
 @media(max-width:900px){
+
   .grid{
     grid-template-columns:repeat(2,1fr)
   }
+
 }
+
+
+/* =========================
+   MOBILE
+========================= */
 
 @media(max-width:520px){
 
@@ -349,128 +465,267 @@ h3{
   section{
     padding-top:14px
   }
+
 }
+
 </style>
+
 </head>
+
 
 <body>
 
+
+<!-- =========================
+     HEADER
+========================= -->
+
 <header>
-<nav>
-<button onclick="document.getElementById('ropa').scrollIntoView({behavior:'smooth'})">
-Ropa
-</button>
 
-<button onclick="document.getElementById('accesorios').scrollIntoView({behavior:'smooth'})">
-Accesorios
-</button>
+  <nav>
 
-<a
-class="instagram"
-href="https://www.instagram.com/encante.ve/"
-target="_blank"
-rel="noopener">
-@encante.ve
-</a>
+    <button
+      onclick="document.getElementById('ropa').scrollIntoView({behavior:'smooth'})"
+    >
+      Ropa
+    </button>
 
-<button class="cart" onclick="toggleCart()">
-🛒
-<span id="count">0</span>
-</button>
 
-</nav>
+    <button
+      onclick="document.getElementById('accesorios').scrollIntoView({behavior:'smooth'})"
+    >
+      Accesorios
+    </button>
+
+
+    <a
+      class="instagram"
+      href="https://www.instagram.com/encante.ve/"
+      target="_blank"
+      rel="noopener"
+    >
+      @encante.ve
+    </a>
+
+
+    <button
+      class="cart"
+      onclick="toggleCart()"
+    >
+
+      🛒
+
+      <span id="count">
+        0
+      </span>
+
+    </button>
+
+  </nav>
+
 </header>
+
+
+
+<!-- =========================
+     HERO
+========================= -->
 
 <div class="hero">
 
-<img
-class="hero-logo"
-src="logo.webp"
-alt="Encante"
-onerror="this.style.display='none'">
+  <img
+    class="hero-logo"
+    src="logo.webp"
+    alt="Encante"
+    onerror="this.style.display='none'"
+  >
 
-<p>Un toque de magia en cada look</p>
+  <p>
+    Un toque de magia en cada look
+  </p>
 
 </div>
+
+
+
+<!-- =========================
+     PRODUCTS
+========================= -->
 
 <main>
 
-<section id="ropa">
 
-<h2>Ropa</h2>
+  <!-- ROPA -->
 
-<div class="grid" id="ropaGrid">
-<p class="empty">Cargando catálogo...</p>
-</div>
+  <section id="ropa">
 
-</section>
+    <h2>
+      Ropa
+    </h2>
 
-<section id="accesorios">
 
-<h2>Accesorios</h2>
+    <div
+      class="grid"
+      id="ropaGrid"
+    >
 
-<div class="grid" id="accGrid">
-<p class="empty">Cargando catálogo...</p>
-</div>
+      <p class="empty">
+        Cargando catálogo...
+      </p>
 
-</section>
+    </div>
+
+  </section>
+
+
+
+  <!-- ACCESORIOS -->
+
+  <section id="accesorios">
+
+    <h2>
+      Accesorios
+    </h2>
+
+
+    <div
+      class="grid"
+      id="accGrid"
+    >
+
+      <p class="empty">
+        Cargando catálogo...
+      </p>
+
+    </div>
+
+  </section>
+
 
 </main>
 
-<aside id="drawer" class="drawer">
 
-<div class="drawer-head">
 
-<h3>Tu carrito</h3>
+<!-- =========================
+     CART
+========================= -->
 
-<button onclick="toggleCart()">×</button>
+<aside
+  id="drawer"
+  class="drawer"
+>
 
-</div>
 
-<div id="items"></div>
+  <div class="drawer-head">
 
-<div class="total">
-<span>Total</span>
-<strong id="total">$0</strong>
-</div>
+    <h3>
+      Tu carrito
+    </h3>
 
-<button class="checkout" onclick="checkout()">
-Comprar por WhatsApp
-</button>
+
+    <button
+      onclick="toggleCart()"
+    >
+      ×
+    </button>
+
+  </div>
+
+
+
+  <div id="items"></div>
+
+
+
+  <div class="total">
+
+    <span>
+      Total
+    </span>
+
+
+    <strong id="total">
+      $0
+    </strong>
+
+  </div>
+
+
+
+  <button
+    class="checkout"
+    onclick="checkout()"
+  >
+    Comprar por WhatsApp
+  </button>
+
 
 </aside>
 
+
+
 <script>
 
+
+/* =========================
+   CONFIGURACIÓN
+========================= */
+
 const WA="584141323438";
+
 
 let products={
   ropa:[],
   accesorios:[]
 };
 
+
 let cart=[];
+
+
+
+/* =========================
+   CARGAR PRODUCTOS
+========================= */
 
 async function loadProducts(){
 
   try{
 
-    const r=await fetch("/api/products",{cache:"no-store"});
+    const r=await fetch(
+      "/api/products",
+      {cache:"no-store"}
+    );
 
-    if(!r.ok)
-      throw new Error("No se pudo consultar Airtable");
+
+    if(!r.ok){
+
+      throw new Error(
+        "No se pudo consultar Airtable"
+      );
+
+    }
+
 
     products=await r.json();
 
+
     renderProducts();
+
 
   }catch(e){
 
-    document.getElementById("ropaGrid").innerHTML=
+    document.getElementById(
+      "ropaGrid"
+    ).innerHTML=
       '<p class="empty">No se pudo cargar el catálogo.</p>';
 
-    document.getElementById("accGrid").innerHTML=
+
+    document.getElementById(
+      "accGrid"
+    ).innerHTML=
       '<p class="empty">No se pudo cargar el catálogo.</p>';
+
 
     console.error(e);
 
@@ -478,32 +733,53 @@ async function loadProducts(){
 
 }
 
+
+
+/* =========================
+   MOSTRAR PRODUCTOS
+========================= */
+
 function renderProducts(){
 
   renderGrid(
     "ropaGrid",
-    products.ropa||[]
+    products.ropa || []
   );
+
 
   renderGrid(
     "accGrid",
-    products.accesorios||[]
+    products.accesorios || []
   );
 
 }
+
+
+
+/* =========================
+   CREAR TARJETAS
+   DISPONIBLES PRIMERO
+   AGOTADOS AL FINAL
+========================= */
 
 function renderGrid(id,arr){
 
   arr=[...arr].sort((a,b)=>{
 
-    const aSold=Number(a.stock)>0?0:1;
-    const bSold=Number(b.stock)>0?0:1;
+    const aSold=
+      Number(a.stock)>0 ? 0 : 1;
+
+    const bSold=
+      Number(b.stock)>0 ? 0 : 1;
 
     return aSold-bSold;
 
   });
 
-  const grid=document.getElementById(id);
+
+  const grid=
+    document.getElementById(id);
+
 
   if(!arr.length){
 
@@ -514,95 +790,129 @@ function renderGrid(id,arr){
 
   }
 
+
   grid.innerHTML=arr.map(p=>`
 
-<article
-class="card"
-data-meta="${escapeHtml(
-  Array.isArray(p.colors)
-    ? p.colors.join(", ")
-    : p.colors||""
-)}"
-data-price="${Number(p.price)||0}"
-data-img="${escapeHtml(p.image||"")}">
+    <article
+      class="card"
 
-${
-p.image
-?
-`<img
-class="card-img"
-src="${escapeHtml(p.image)}"
-alt=""
-loading="lazy"
-onerror="this.style.display='none'">`
-:
-`<div class="card-img"></div>`
+      data-meta="${escapeHtml(
+        Array.isArray(p.colors)
+          ? p.colors.join(", ")
+          : p.colors || ""
+      )}"
+
+      data-price="${Number(p.price)||0}"
+
+      data-img="${escapeHtml(p.image||"")}"
+    >
+
+
+      ${
+        p.image
+
+        ? `<img
+            class="card-img"
+            src="${escapeHtml(p.image)}"
+            alt=""
+            loading="lazy"
+            onerror="this.style.display='none'"
+          >`
+
+        : `<div class="card-img"></div>`
+      }
+
+
+
+      <div class="details">
+
+        <div>
+
+
+          ${
+            p.type
+              ? `<p>${escapeHtml(p.type)}</p>`
+              : ""
+          }
+
+
+          ${
+            Array.isArray(p.colors) && p.colors.length
+              ? `<p>Colores: ${escapeHtml(p.colors.join(", "))}</p>`
+              : ""
+          }
+
+        </div>
+
+
+        <strong>
+          $${formatPrice(p.price)}
+        </strong>
+
+      </div>
+
+
+
+      <div
+        class="status ${p.stock>0?"":"sold"}"
+      >
+
+        ${
+          p.stock>0
+            ? "DISPONIBLE"
+            : "AGOTADO"
+        }
+
+      </div>
+
+
+
+      <div class="actions">
+
+        <button
+          ${p.stock>0?"":"disabled"}
+          onclick="addToCart(this)"
+        >
+
+          ${
+            p.stock>0
+              ? "Agregar al carrito"
+              : "Agotado"
+          }
+
+        </button>
+
+
+
+        <button
+          class="wa"
+          ${p.stock>0?"":"disabled"}
+          onclick="buyWA(this)"
+        >
+
+          WhatsApp
+
+        </button>
+
+      </div>
+
+
+    </article>
+
+  `).join("");
+
 }
 
-<div class="details">
 
-<div>
 
-${
-p.type
-?
-`<p>${escapeHtml(p.type)}</p>`
-:
-""
-}
-
-${
-Array.isArray(p.colors)&&p.colors.length
-?
-`<p>Colores: ${escapeHtml(p.colors.join(", "))}</p>`
-:
-""
-}
-
-</div>
-
-<strong>
-$${formatPrice(p.price)}
-</strong>
-
-</div>
-
-<div class="status ${p.stock>0?"":"sold"}">
-
-${p.stock>0?"DISPONIBLE":"AGOTADO"}
-
-</div>
-
-<div class="actions">
-
-<button
-${p.stock>0?"":"disabled"}
-onclick="addToCart(this)">
-
-${p.stock>0?"Agregar al carrito":"Agotado"}
-
-</button>
-
-<button
-class="wa"
-${p.stock>0?"":"disabled"}
-onclick="buyWA(this)">
-
-WhatsApp
-
-</button>
-
-</div>
-
-</article>
-
-`).join("");
-
-}
+/* =========================
+   FORMATO DE PRECIO
+========================= */
 
 function formatPrice(value){
 
   const n=Number(value)||0;
+
 
   return Number.isInteger(n)
     ? String(n)
@@ -610,36 +920,64 @@ function formatPrice(value){
 
 }
 
+
+
+/* =========================
+   SEGURIDAD HTML
+========================= */
+
 function escapeHtml(v){
 
   return String(v??"").replace(
     /[&<>"']/g,
+
     m=>({
+
       "&":"&amp;",
       "<":"&lt;",
       ">":"&gt;",
       '"':"&quot;",
       "'":"&#039;"
+
     }[m])
+
   );
 
 }
+
+
+
+/* =========================
+   OBTENER PRODUCTO
+========================= */
 
 function getP(btn){
 
   const c=btn.closest(".card");
 
+
   return{
+
     meta:c.dataset.meta,
+
     price:+c.dataset.price,
+
     img:c.dataset.img
+
   };
 
 }
 
+
+
+/* =========================
+   AGREGAR AL CARRITO
+========================= */
+
 function addToCart(btn){
 
   const p=getP(btn);
+
 
   const x=cart.find(
     i=>
@@ -648,6 +986,7 @@ function addToCart(btn){
       i.img===p.img
   );
 
+
   if(x){
 
     x.qty++;
@@ -655,36 +994,61 @@ function addToCart(btn){
   }else{
 
     p.qty=1;
+
     cart.push(p);
 
   }
+
 
   renderCart();
 
 }
 
+
+
+/* =========================
+   WHATSAPP INDIVIDUAL
+========================= */
+
 function buyWA(btn){
 
   const p=getP(btn);
 
+
+  /*
+    💜 = \u{1F49C}
+    📸 = \u{1F4F8}
+  */
+
   let m=
-`Holaa, quisiera comprar:
+    `Hola \u{1F49C} Quisiera comprar:\n` +
+    `\u{1F4F8} Adjunta una captura del producto\n`;
 
-Adjunta una captura del producto
-`;
 
-  if(p.meta)
-    m+=`${p.meta}\n`;
+  if(p.meta){
 
-  m+=`Precio: $${formatPrice(p.price)}`;
+    m+=
+      `${p.meta}\n`;
+
+  }
+
+
+  m+=
+    `Precio: $${formatPrice(p.price)}`;
+
 
   window.open(
-    "https://wa.me/"+WA+
-    "?text="+encodeURIComponent(m),
+    "https://wa.me/"+WA+"?text="+encodeURIComponent(m),
     "_blank"
   );
 
 }
+
+
+
+/* =========================
+   ABRIR / CERRAR CARRITO
+========================= */
 
 function toggleCart(){
 
@@ -692,9 +1056,16 @@ function toggleCart(){
     .getElementById("drawer")
     .classList.toggle("open");
 
+
   renderCart();
 
 }
+
+
+
+/* =========================
+   QUITAR PRODUCTO
+========================= */
 
 function removeItem(i){
 
@@ -704,123 +1075,200 @@ function removeItem(i){
 
 }
 
+
+
+/* =========================
+   MOSTRAR CARRITO
+========================= */
+
 function renderCart(){
 
-  document.getElementById("count").textContent=
-    cart.reduce((s,x)=>s+x.qty,0);
+  document.getElementById(
+    "count"
+  ).textContent=
+    cart.reduce(
+      (s,x)=>s+x.qty,
+      0
+    );
 
-  const b=document.getElementById("items");
+
+  const b=
+    document.getElementById("items");
+
 
   if(!cart.length){
 
     b.innerHTML=
       '<p style="text-align:center;color:#777;margin-top:45px;font:15px Georgia,serif">Tu carrito está vacío ✨</p>';
 
-    document.getElementById("total").textContent="$0";
+
+    document.getElementById(
+      "total"
+    ).textContent="$0";
+
 
     return;
 
   }
 
+
+
   b.innerHTML=cart.map((x,i)=>`
 
-<div class="item">
+    <div class="item">
 
-${
-x.img
-?
-`<img
-src="${escapeHtml(x.img)}"
-alt=""
-style="width:58px;height:72px;object-fit:cover">`
-:
-`<div
-style="width:58px;height:72px;background:#f6f4f7">
-</div>`
-}
 
-<div>
+      ${
+        x.img
 
-${
-x.meta
-?
-`<small>${escapeHtml(x.meta)}</small>`
-:
-""
-}
+        ? `<img
+            src="${escapeHtml(x.img)}"
+            alt=""
+            style="width:58px;height:72px;object-fit:cover"
+          >`
 
-<small>
-$${formatPrice(x.price)} × ${x.qty}
-</small>
+        : `<div
+            style="width:58px;height:72px;background:#f6f4f7"
+          ></div>`
+      }
 
-</div>
 
-<button onclick="removeItem(${i})">
-Quitar
-</button>
 
-</div>
+      <div>
 
-`).join("");
 
-  document.getElementById("total").textContent=
+        ${
+          x.meta
+            ? `<small>${escapeHtml(x.meta)}</small>`
+            : ""
+        }
+
+
+        <small>
+          $${formatPrice(x.price)} × ${x.qty}
+        </small>
+
+
+      </div>
+
+
+
+      <button
+        onclick="removeItem(${i})"
+      >
+        Quitar
+      </button>
+
+
+    </div>
+
+  `).join("");
+
+
+  document.getElementById(
+    "total"
+  ).textContent=
     "$"+
     cart
-      .reduce((s,x)=>s+x.price*x.qty,0)
+      .reduce(
+        (s,x)=>
+          s+x.price*x.qty,
+        0
+      )
       .toFixed(2);
 
 }
+
+
+
+/* =========================
+   FINALIZAR PEDIDO
+   MISMO ESTILO QUE WHATSAPP
+========================= */
 
 function checkout(){
 
-  if(!cart.length)
-    return;
+  if(!cart.length)return;
 
-  const lines=cart.map(x=>{
 
-    let line=
-`Adjunta una captura del producto`;
+  const lines=
+    cart.map(x=>{
 
-    if(x.meta)
-      line+=`\n${x.meta}`;
+      /*
+        📸 = \u{1F4F8}
+      */
 
-    line+=
-      `\nPrecio: $${formatPrice(x.price)} × ${x.qty}`;
+      let line=
+        `\u{1F4F8} Adjunta una captura del producto`;
 
-    return line;
 
-  }).join("\n\n");
+      if(x.meta){
+
+        line+=
+          `\n${x.meta}`;
+
+      }
+
+
+      line+=
+        `\nPrecio: $${formatPrice(x.price)} × ${x.qty}`;
+
+
+      return line;
+
+    }).join("\n\n");
+
 
   const t=
     cart
-      .reduce((s,x)=>s+x.price*x.qty,0)
+      .reduce(
+        (s,x)=>
+          s+x.price*x.qty,
+        0
+      )
       .toFixed(2);
 
+
+  /*
+    💜 = \u{1F49C}
+  */
+
   const m=
-`Holaa, quisiera realizar este pedido:
+    `Hola \u{1F49C} Quisiera realizar este pedido:\n\n` +
+    `${lines}\n\n` +
+    `Total: $${t}`;
 
-${lines}
-
-Total: $${t}`;
 
   window.open(
-    "https://wa.me/"+WA+
-    "?text="+encodeURIComponent(m),
+    "https://wa.me/"+WA+"?text="+encodeURIComponent(m),
     "_blank"
   );
 
 }
 
+
+
+/* =========================
+   INICIO
+========================= */
+
 loadProducts();
+
+
+/* Actualización automática
+   cada 60 segundos */
 
 setInterval(
   loadProducts,
   60000
 );
 
+
 renderCart();
 
 </script>
 
+
 </body>
+
 </html>

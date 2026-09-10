@@ -10,12 +10,25 @@
   content="width=device-width,initial-scale=1"
 >
 
+<!-- Forzar siempre modo claro -->
+<meta name="color-scheme" content="light">
+<meta name="supported-color-schemes" content="light">
+
 <title>
   Encante — Un toque de magia en cada look
 </title>
 
 
 <style>
+
+/* =========================
+   FORZAR TEMA CLARO
+========================= */
+
+:root{
+  color-scheme:light only;
+}
+
 
 /* =========================
    GENERAL
@@ -25,11 +38,17 @@
   box-sizing:border-box
 }
 
+html{
+  color-scheme:light only;
+  background:#fff
+}
+
 body{
   margin:0;
   color:#29242b;
   background:#fff;
-  font-family:Arial,sans-serif
+  font-family:Arial,sans-serif;
+  color-scheme:light only
 }
 
 
@@ -58,7 +77,8 @@ nav{
 
 nav button{
   border:0;
-  background:none;
+  background:#fff;
+  color:#29242b;
   font-size:10px;
   letter-spacing:1px;
   cursor:pointer;
@@ -111,7 +131,8 @@ nav button{
 .hero{
   text-align:center;
   padding:20px 20px 18px;
-  overflow:hidden
+  overflow:hidden;
+  background:#fff
 }
 
 .hero-logo{
@@ -138,7 +159,8 @@ nav button{
 main{
   max-width:1220px;
   margin:auto;
-  padding:0 5% 80px
+  padding:0 5% 80px;
+  background:#fff
 }
 
 section{
@@ -148,7 +170,8 @@ section{
 
 h2{
   font:400 31px Georgia,serif;
-  margin:0 0 22px
+  margin:0 0 22px;
+  color:#29242b
 }
 
 
@@ -163,7 +186,8 @@ h2{
 }
 
 .card{
-  min-width:0
+  min-width:0;
+  background:#fff
 }
 
 .card img{
@@ -197,7 +221,8 @@ h2{
 h3{
   font-size:12px;
   font-weight:500;
-  margin:0 0 5px
+  margin:0 0 5px;
+  color:#29242b
 }
 
 .details p{
@@ -208,7 +233,8 @@ h3{
 
 .details strong{
   font-size:12px;
-  white-space:nowrap
+  white-space:nowrap;
+  color:#29242b
 }
 
 
@@ -286,7 +312,9 @@ h3{
   transition:.25s;
   padding:25px;
   display:flex;
-  flex-direction:column
+  flex-direction:column;
+  color:#29242b;
+  color-scheme:light only
 }
 
 .drawer.open{
@@ -303,12 +331,14 @@ h3{
 
 .drawer-head h3{
   font:400 26px Georgia,serif;
-  margin:0
+  margin:0;
+  color:#29242b
 }
 
 .drawer-head button{
   border:0;
-  background:none;
+  background:#fff;
+  color:#29242b;
   font-size:22px;
   cursor:pointer
 }
@@ -337,7 +367,8 @@ h3{
 }
 
 .item strong{
-  font-size:11px
+  font-size:11px;
+  color:#29242b
 }
 
 .item small{
@@ -349,7 +380,7 @@ h3{
 
 .item button{
   border:0;
-  background:none;
+  background:#fff;
   color:#888;
   font-size:9px;
   cursor:pointer
@@ -363,7 +394,8 @@ h3{
   justify-content:space-between;
   padding-top:15px;
   border-top:1px solid #ddd;
-  font-size:12px
+  font-size:12px;
+  color:#29242b
 }
 
 
@@ -983,9 +1015,14 @@ function buyWA(btn){
   const p=getP(btn);
 
 
+  /*
+    💜 = \u{1F49C}
+    📸 = \u{1F4F8}
+  */
+
   let m=
-    `Hola 💜 Quisiera comprar:\n` +
-    `📸 Adjunta una captura del producto\n`;
+    `Hola \u{1F49C} Quisiera comprar:\n` +
+    `\u{1F4F8} Adjunta una captura del producto\n`;
 
 
   if(p.meta){
@@ -1157,8 +1194,12 @@ function checkout(){
   const lines=
     cart.map(x=>{
 
+      /*
+        📸 = \u{1F4F8}
+      */
+
       let line=
-        `📸 Adjunta una captura del producto`;
+        `\u{1F4F8} Adjunta una captura del producto`;
 
 
       if(x.meta){
@@ -1188,8 +1229,12 @@ function checkout(){
       .toFixed(2);
 
 
+  /*
+    💜 = \u{1F49C}
+  */
+
   const m=
-    `Hola 💜 Quisiera realizar este pedido:\n\n` +
+    `Hola \u{1F49C} Quisiera realizar este pedido:\n\n` +
     `${lines}\n\n` +
     `Total: $${t}`;
 

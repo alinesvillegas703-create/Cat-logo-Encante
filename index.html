@@ -10,7 +10,7 @@
   content="width=device-width,initial-scale=1"
 >
 
-<!-- Forzar siempre modo claro -->
+<!-- FORZAR SIEMPRE MODO CLARO -->
 <meta name="color-scheme" content="light">
 <meta name="supported-color-schemes" content="light">
 
@@ -29,6 +29,15 @@
   color-scheme:light only;
 }
 
+html{
+  color-scheme:light only;
+  background:#fff;
+}
+
+body{
+  color-scheme:light only;
+}
+
 
 /* =========================
    GENERAL
@@ -38,17 +47,11 @@
   box-sizing:border-box
 }
 
-html{
-  color-scheme:light only;
-  background:#fff
-}
-
 body{
   margin:0;
   color:#29242b;
   background:#fff;
-  font-family:Arial,sans-serif;
-  color-scheme:light only
+  font-family:Arial,sans-serif
 }
 
 
@@ -1015,14 +1018,9 @@ function buyWA(btn){
   const p=getP(btn);
 
 
-  /*
-    💜 = \u{1F49C}
-    📸 = \u{1F4F8}
-  */
-
   let m=
-    `Hola \u{1F49C} Quisiera comprar:\n` +
-    `\u{1F4F8} Adjunta una captura del producto\n`;
+    `Hola Quisiera comprar:\n` +
+    `Adjunta una captura del producto\n`;
 
 
   if(p.meta){
@@ -1037,8 +1035,32 @@ function buyWA(btn){
     `Precio: $${formatPrice(p.price)}`;
 
 
+  /*
+    Emojis codificados directamente
+    en UTF-8 para evitar que aparezca �
+
+    💜 = %F0%9F%92%9C
+    📸 = %F0%9F%93%B8
+  */
+
+  const emojiHeart="%F0%9F%92%9C";
+  const emojiCamera="%F0%9F%93%B8";
+
+
+  let encoded=
+    encodeURIComponent(m)
+      .replace(
+        "Hola%20",
+        "Hola%20"+emojiHeart+"%20"
+      )
+      .replace(
+        "Adjunta%20una%20captura",
+        emojiCamera+"%20Adjunta%20una%20captura"
+      );
+
+
   window.open(
-    "https://wa.me/"+WA+"?text="+encodeURIComponent(m),
+    "https://wa.me/"+WA+"?text="+encoded,
     "_blank"
   );
 
@@ -1183,7 +1205,6 @@ function renderCart(){
 
 /* =========================
    FINALIZAR PEDIDO
-   MISMO ESTILO QUE WHATSAPP
 ========================= */
 
 function checkout(){
@@ -1194,12 +1215,8 @@ function checkout(){
   const lines=
     cart.map(x=>{
 
-      /*
-        📸 = \u{1F4F8}
-      */
-
       let line=
-        `\u{1F4F8} Adjunta una captura del producto`;
+        `Adjunta una captura del producto`;
 
 
       if(x.meta){
@@ -1229,18 +1246,41 @@ function checkout(){
       .toFixed(2);
 
 
-  /*
-    💜 = \u{1F49C}
-  */
-
   const m=
-    `Hola \u{1F49C} Quisiera realizar este pedido:\n\n` +
+    `Hola Quisiera realizar este pedido:\n\n` +
     `${lines}\n\n` +
     `Total: $${t}`;
 
 
+  /*
+    💜 = %F0%9F%92%9C
+    📸 = %F0%9F%93%B8
+  */
+
+  const emojiHeart="%F0%9F%92%9C";
+  const emojiCamera="%F0%9F%93%B8";
+
+
+  let encoded=
+    encodeURIComponent(m);
+
+
+  encoded=
+    encoded.replace(
+      "Hola%20",
+      "Hola%20"+emojiHeart+"%20"
+    );
+
+
+  encoded=
+    encoded.replaceAll(
+      "Adjunta%20una%20captura",
+      emojiCamera+"%20Adjunta%20una%20captura"
+    );
+
+
   window.open(
-    "https://wa.me/"+WA+"?text="+encodeURIComponent(m),
+    "https://wa.me/"+WA+"?text="+encoded,
     "_blank"
   );
 
@@ -1271,4 +1311,4 @@ renderCart();
 
 </body>
 
-  </html>
+      </html>

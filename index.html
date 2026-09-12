@@ -1,768 +1,1044 @@
 <!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Encante — Un toque de magia en cada look</title>
 
-<html lang="es">  
-<head>  
-<meta charset="utf-8">  
-<meta name="viewport" content="width=device-width,initial-scale=1">  
-<title>Encante — Un toque de magia en cada look</title>  <style>  
-*{box-sizing:border-box}  
-  
-body{  
-  margin:0;  
-  color:#29242b;  
-  background:#fff;  
-  font-family:Arial,sans-serif  
-}  
-  
-header{  
-  min-height:68px;  
-  display:flex;  
-  align-items:center;  
-  justify-content:flex-end;  
-  padding:8px 5%;  
-  border-bottom:1px solid #eee;  
-  position:sticky;  
-  top:0;  
-  background:#fff;  
-  z-index:20  
-}  
-  
-nav{  
-  display:flex;  
-  gap:8px;  
-  align-items:center  
-}  
-  
-nav button{  
-  border:0;  
-  background:none;  
-  font-size:10px;  
-  letter-spacing:1px;  
-  cursor:pointer;  
-  padding:9px  
-}  
-  
-.instagram{  
-  color:#29242b;  
-  text-decoration:none;  
-  font-size:10px;  
-  letter-spacing:1px;  
-  padding:9px;  
-  white-space:nowrap  
-}  
-  
-.instagram:hover{  
-  opacity:.65  
-}  
-  
-.cart{  
-  border:1px solid #ddd!important;  
-  position:relative  
-}  
-  
-#count{  
-  position:absolute;  
-  top:-7px;  
-  right:-7px;  
-  width:18px;  
-  height:18px;  
-  background:#4c2fc5;  
-  color:#fff;  
-  border-radius:50%;  
-  display:grid;  
-  place-items:center;  
-  font-size:9px  
-}  
-  
-.hero{  
-  text-align:center;  
-  padding:20px 20px 18px;  
-  overflow:hidden  
-}  
-  
-.hero-logo{  
-  width:220px;  
-  max-width:70%;  
-  height:auto;  
-  display:block;  
-  margin:-5px auto 0;  
-  position:relative;  
-  top:-2px  
-}  
-  
-.hero p{  
-  margin:0;  
-  color:#777;  
-  font-size:12px  
-}  
-  
-main{  
-  max-width:1220px;  
-  margin:auto;  
-  padding:0 5% 80px  
-}  
-  
-section{  
-  padding-top:18px;  
-  margin-bottom:55px  
-}  
-  
-h2{  
-  font:400 31px Georgia,serif;  
-  margin:0 0 22px  
-}  
-  
-.grid{  
-  display:grid;  
-  grid-template-columns:repeat(4,1fr);  
-  gap:25px  
-}  
-  
-.card{  
-  min-width:0  
-}  
-  
-.card img{  
-  width:100%;  
-  aspect-ratio:3/4;  
-  object-fit:cover;  
-  background:#f6f4f7;  
-  display:block  
-}  
-  
-.card-img{  
-  width:100%;  
-  aspect-ratio:3/4;  
-  object-fit:cover;  
-  background:#f6f4f7;  
-  display:block  
-}  
-  
-.details{  
-  display:flex;  
-  justify-content:space-between;  
-  gap:10px;  
-  padding-top:11px  
-}  
-  
-h3{  
-  font-size:12px;  
-  font-weight:500;  
-  margin:0 0 5px  
-}  
-  
-.details p{  
-  font-size:10px;  
-  color:#777;  
-  margin:0 0 4px  
-}  
-  
-.details strong{  
-  font-size:12px;  
-  white-space:nowrap  
-}  
-  
-.status{  
-  display:inline-block;  
-  margin-top:8px;  
-  font-size:8px;  
-  letter-spacing:1px;  
-  color:#438354  
-}  
-  
-.status.sold{  
-  color:#999  
-}  
-  
-.actions{  
-  display:flex;  
-  gap:6px;  
-  margin-top:9px  
-}  
-  
-.actions button{  
-  flex:1;  
-  border:1px solid #4c2fc5;  
-  background:#4c2fc5;  
-  color:#fff;  
-  padding:9px 5px;  
-  font-size:8px;  
-  letter-spacing:.7px;  
-  text-transform:uppercase;  
-  cursor:pointer  
-}  
-  
-.actions .wa{  
-  background:#fff;  
-  color:#4c2fc5  
-}  
-  
-.actions button:disabled{  
-  background:#eee;  
-  color:#999;  
-  border-color:#eee;  
-  cursor:not-allowed  
-}  
-  
-.empty{  
-  color:#999;  
-  font-size:11px  
-}  
-  
-.drawer{  
-  position:fixed;  
-  right:0;  
-  top:0;  
-  height:100%;  
-  width:min(420px,92vw);  
-  background:#fff;  
-  z-index:50;  
-  box-shadow:-10px 0 30px #0002;  
-  transform:translateX(100%);  
-  transition:.25s;  
-  padding:25px;  
-  display:flex;  
-  flex-direction:column  
-}  
-  
-.drawer.open{  
-  transform:translateX(0)  
-}  
-  
-.drawer-head{  
-  display:flex;  
-  justify-content:space-between;  
-  align-items:center;  
-  border-bottom:1px solid #eee;  
-  padding-bottom:15px  
-}  
-  
-.drawer-head h3{  
-  font:400 26px Georgia,serif;  
-  margin:0  
-}  
-  
-.drawer-head button{  
-  border:0;  
-  background:none;  
-  font-size:22px;  
-  cursor:pointer  
-}  
-  
-#items{  
-  overflow:auto;  
-  flex:1  
-}  
-  
-.item{  
-  display:grid;  
-  grid-template-columns:58px 1fr auto;  
-  gap:10px;  
-  padding:13px 0;  
-  border-bottom:1px solid #eee;  
-  align-items:center  
-}  
-  
-.item img{  
-  width:58px;  
-  height:72px;  
-  object-fit:cover  
-}  
-  
-.item strong{  
-  font-size:11px  
-}  
-  
-.item small{  
-  display:block;  
-  color:#777;  
-  margin-top:4px;  
-  font-size:9px  
-}  
-  
-.item button{  
-  border:0;  
-  background:none;  
-  color:#888;  
-  font-size:9px;  
-  cursor:pointer  
-}  
-  
-.total{  
-  display:flex;  
-  justify-content:space-between;  
-  padding-top:15px;  
-  border-top:1px solid #ddd;  
-  font-size:12px  
-}  
-  
-.checkout{  
-  margin-top:12px;  
-  padding:14px;  
-  border:0;  
-  background:#4c2fc5;  
-  color:#fff;  
-  text-transform:uppercase;  
-  font-size:9px;  
-  letter-spacing:1px;  
-  cursor:pointer  
-}  
-  
-@media(max-width:900px){  
-  .grid{  
-    grid-template-columns:repeat(2,1fr)  
-  }  
-}  
-  
-@media(max-width:520px){  
-  
-  header{  
-    padding:8px 4%;  
-    min-height:64px  
-  }  
-  
-  nav{  
-    gap:1px  
-  }  
-  
-  nav button,  
-  .instagram{  
-    font-size:8px;  
-    padding:7px 5px  
-  }  
-  
-  .hero{  
-    padding:14px 20px 12px  
-  }  
-  
-  .hero-logo{  
-    width:190px;  
-    max-width:75%;  
-    margin:-4px auto 0  
-  }  
-  
-  .grid{  
-    gap:15px  
-  }  
-  
-  section{  
-    padding-top:14px  
-  }  
-}  
-</style>  </head>  <body>  <header>  
-<nav>  
-<button onclick="document.getElementById('ropa').scrollIntoView({behavior:'smooth'})">  
-Ropa  
-</button>  <button onclick="document.getElementById('accesorios').scrollIntoView({behavior:'smooth'})">  
-Accesorios  
-</button>  <a  
-class="instagram"  
-href="https://www.instagram.com/encante.ve/"  
-target="_blank"  
+<style>
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  color:#29242b;
+  background:#fff;
+  font-family:Arial,sans-serif
+}
+
+header{
+  min-height:68px;
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  padding:8px 5%;
+  border-bottom:1px solid #eee;
+  position:sticky;
+  top:0;
+  background:#fff;
+  z-index:20
+}
+
+nav{
+  display:flex;
+  gap:8px;
+  align-items:center
+}
+
+nav button{
+  border:0;
+  background:none;
+  font-size:10px;
+  letter-spacing:1px;
+  cursor:pointer;
+  padding:9px
+}
+
+.instagram{
+  color:#29242b;
+  text-decoration:none;
+  font-size:10px;
+  letter-spacing:1px;
+  padding:9px;
+  white-space:nowrap
+}
+
+.instagram:hover{
+  opacity:.65
+}
+
+.cart{
+  border:1px solid #ddd!important;
+  position:relative
+}
+
+#count{
+  position:absolute;
+  top:-7px;
+  right:-7px;
+  width:18px;
+  height:18px;
+  background:#4c2fc5;
+  color:#fff;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  font-size:9px
+}
+
+.hero{
+  text-align:center;
+  padding:20px 20px 18px;
+  overflow:hidden
+}
+
+.hero-logo{
+  width:220px;
+  max-width:70%;
+  height:auto;
+  display:block;
+  margin:-5px auto 0;
+  position:relative;
+  top:-2px
+}
+
+.hero p{
+  margin:0;
+  color:#777;
+  font-size:12px
+}
+
+main{
+  max-width:1220px;
+  margin:auto;
+  padding:0 5% 80px
+}
+
+section{
+  padding-top:18px;
+  margin-bottom:55px
+}
+
+h2{
+  font:400 31px Georgia,serif;
+  margin:0 0 22px
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:25px
+}
+
+.card{
+  min-width:0
+}
+
+.card-img{
+  width:100%;
+  aspect-ratio:3/4;
+  object-fit:cover;
+  background:#f6f4f7;
+  display:block
+}
+
+.details{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  padding-top:11px
+}
+
+h3{
+  font-size:12px;
+  font-weight:500;
+  margin:0 0 5px
+}
+
+.details p{
+  font-size:10px;
+  color:#777;
+  margin:0 0 4px
+}
+
+.details strong{
+  font-size:12px;
+  white-space:nowrap
+}
+
+.status{
+  display:inline-block;
+  margin-top:8px;
+  font-size:8px;
+  letter-spacing:1px;
+  color:#438354
+}
+
+.status.sold{
+  color:#999
+}
+
+.actions{
+  display:flex;
+  gap:6px;
+  margin-top:9px
+}
+
+.actions button{
+  flex:1;
+  border:1px solid #4c2fc5;
+  background:#4c2fc5;
+  color:#fff;
+  padding:9px 5px;
+  font-size:8px;
+  letter-spacing:.7px;
+  text-transform:uppercase;
+  cursor:pointer
+}
+
+.actions .wa{
+  background:#fff;
+  color:#4c2fc5
+}
+
+.actions button:disabled{
+  background:#eee;
+  color:#999;
+  border-color:#eee;
+  cursor:not-allowed
+}
+
+.empty{
+  color:#999;
+  font-size:11px
+}
+
+.drawer{
+  position:fixed;
+  right:0;
+  top:0;
+  height:100%;
+  width:min(420px,92vw);
+  background:#fff;
+  z-index:50;
+  box-shadow:-10px 0 30px #0002;
+  transform:translateX(100%);
+  transition:.25s;
+  padding:25px;
+  display:flex;
+  flex-direction:column
+}
+
+.drawer.open{
+  transform:translateX(0)
+}
+
+.drawer-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  border-bottom:1px solid #eee;
+  padding-bottom:15px
+}
+
+.drawer-head h3{
+  font:400 26px Georgia,serif;
+  margin:0
+}
+
+.drawer-head button{
+  border:0;
+  background:none;
+  font-size:22px;
+  cursor:pointer
+}
+
+#items{
+  overflow:auto;
+  flex:1
+}
+
+.item{
+  display:grid;
+  grid-template-columns:58px 1fr auto;
+  gap:10px;
+  padding:13px 0;
+  border-bottom:1px solid #eee;
+  align-items:center
+}
+
+.item img{
+  width:58px;
+  height:72px;
+  object-fit:cover
+}
+
+.item strong{
+  font-size:11px
+}
+
+.item small{
+  display:block;
+  color:#777;
+  margin-top:4px;
+  font-size:9px
+}
+
+.item button{
+  border:0;
+  background:none;
+  color:#888;
+  font-size:9px;
+  cursor:pointer
+}
+
+.total{
+  display:flex;
+  justify-content:space-between;
+  padding-top:15px;
+  border-top:1px solid #ddd;
+  font-size:12px
+}
+
+.checkout{
+  margin-top:12px;
+  padding:14px;
+  border:0;
+  background:#4c2fc5;
+  color:#fff;
+  text-transform:uppercase;
+  font-size:9px;
+  letter-spacing:1px;
+  cursor:pointer
+}
+
+@media(max-width:900px){
+  .grid{
+    grid-template-columns:repeat(2,1fr)
+  }
+}
+
+@media(max-width:520px){
+
+  header{
+    padding:8px 4%;
+    min-height:64px
+  }
+
+  nav{
+    gap:1px
+  }
+
+  nav button,
+  .instagram{
+    font-size:8px;
+    padding:7px 5px
+  }
+
+  .hero{
+    padding:14px 20px 12px
+  }
+
+  .hero-logo{
+    width:190px;
+    max-width:75%;
+    margin:-4px auto 0
+  }
+
+  .grid{
+    gap:15px
+  }
+
+  section{
+    padding-top:14px
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+
+<nav>
+
+<button onclick="document.getElementById('ropa').scrollIntoView({behavior:'smooth'})">
+Ropa
+</button>
+
+<button onclick="document.getElementById('accesorios').scrollIntoView({behavior:'smooth'})">
+Accesorios
+</button>
+
+<a
+class="instagram"
+href="https://www.instagram.com/encante.ve/"
+target="_blank"
 rel="noopener">
 @encante.ve
 </a>
 
-<button class="cart" onclick="toggleCart()">  
-🛒  
-<span id="count">0</span>  
-</button>  </nav>  
-</header>  <div class="hero">  <img  
-class="hero-logo"  
-src="logo.webp"  
-alt="Encante"  
+<button class="cart" onclick="toggleCart()">
+🛒
+<span id="count">0</span>
+</button>
+
+</nav>
+
+</header>
+
+
+<div class="hero">
+
+<img
+class="hero-logo"
+src="logo.webp"
+alt="Encante"
 onerror="this.style.display='none'">
 
-<p>Un toque de magia en cada look</p>  </div>  <main>  <section id="ropa">  <h2>Ropa</h2>  <div class="grid" id="ropaGrid">  
-<p class="empty">Cargando catálogo...</p>  
-</div>  </section>  <section id="accesorios">  <h2>Accesorios</h2>  <div class="grid" id="accGrid">  
-<p class="empty">Cargando catálogo...</p>  
-</div>  </section>  </main>  <aside id="drawer" class="drawer">  <div class="drawer-head">  <h3>Tu carrito</h3>  <button onclick="toggleCart()">×</button>
+<p>Un toque de magia en cada look</p>
 
-</div>  <div id="items"></div>  <div class="total">  
-<span>Total</span>  
-<strong id="total">$0</strong>  
-</div>  <button class="checkout" onclick="checkout()">  
-Comprar por WhatsApp  
-</button>  </aside>  <script>  
-  
-const WA="584141323438";  
-  
-let products={  
-  ropa:[],  
-  accesorios:[]  
-};  
-  
-let cart=[];  
-  
-async function loadProducts(){  
-  
-  try{  
-  
-    const r=await fetch("/api/products",{cache:"no-store"});  
-  
-    if(!r.ok)  
-      throw new Error("No se pudo consultar Airtable");  
-  
-    products=await r.json();  
-  
-    renderProducts();  
-  
-  }catch(e){  
-  
-    document.getElementById("ropaGrid").innerHTML=  
-      '<p class="empty">No se pudo cargar el catálogo.</p>';  
-  
-    document.getElementById("accGrid").innerHTML=  
-      '<p class="empty">No se pudo cargar el catálogo.</p>';  
-  
-    console.error(e);  
-  
-  }  
-  
-}  
-  
-function renderProducts(){  
-  
-  renderGrid(  
-    "ropaGrid",  
-    products.ropa||[]  
-  );  
-  
-  renderGrid(  
-    "accGrid",  
-    products.accesorios||[]  
-  );  
-  
-}  
-  
-function renderGrid(id,arr){  
-  
-  arr=[...arr].sort((a,b)=>{  
-  
-    const aSold=Number(a.stock)>0?0:1;  
-    const bSold=Number(b.stock)>0?0:1;  
-  
-    return aSold-bSold;  
-  
-  });  
-  
-  const grid=document.getElementById(id);  
-  
-  if(!arr.length){  
-  
-    grid.innerHTML=  
-      '<p class="empty">No hay productos disponibles.</p>';  
-  
-    return;  
-  
-  }  
-  
-  grid.innerHTML=arr.map(p=>`  
-  
-<article  
-class="card"  
-data-meta="${escapeHtml(  
-  Array.isArray(p.colors)  
-    ? p.colors.join(", ")  
-    : p.colors||""  
-)}"  
-data-price="${Number(p.price)||0}"  
-data-img="${escapeHtml(p.image||"")}">  
-  
-${  
-p.image  
-?  
-`<img  
-class="card-img"  
-src="${escapeHtml(p.image)}"  
-alt=""  
-loading="lazy"  
-onerror="this.style.display='none'">`  
-:  
-`<div class="card-img"></div>`  
-}  
-  
-<div class="details">  
-  
-<div>  
-  
-${  
-p.type  
-?  
-`<p>${escapeHtml(p.type)}</p>`  
-:  
-""  
-}  
-  
-${  
-Array.isArray(p.colors)&&p.colors.length  
-?  
-`<p>Colores: ${escapeHtml(p.colors.join(", "))}</p>`  
-:  
-""  
-}  
-  
-</div>  
-  
-<strong>  
-$${formatPrice(p.price)}  
-</strong>  
-  
-</div>  
-  
-<div class="status ${p.stock>0?"":"sold"}">  
-  
-${p.stock>0?"DISPONIBLE":"AGOTADO"}  
-  
-</div>  
-  
-<div class="actions">  
-  
-<button  
-${p.stock>0?"":"disabled"}  
-onclick="addToCart(this)">  
-  
-${p.stock>0?"Agregar al carrito":"Agotado"}  
-  
-</button>  
-  
-<button  
-class="wa"  
-${p.stock>0?"":"disabled"}  
-onclick="buyWA(this)">  
-  
-WhatsApp  
-  
-</button>  
-  
-</div>  
-  
-</article>  
-  
-`).join("");  
-  
-}  
-  
-function formatPrice(value){  
-  
-  const n=Number(value)||0;  
-  
-  return Number.isInteger(n)  
-    ? String(n)  
-    : n.toFixed(2);  
-  
-}  
-  
-function escapeHtml(v){  
-  
-  return String(v??"").replace(  
-    /[&<>"']/g,  
-    m=>({  
-      "&":"&amp;",  
-      "<":"&lt;",  
-      ">":"&gt;",  
-      '"':"&quot;",  
-      "'":"&#039;"  
-    }[m])  
-  );  
-  
-}  
-  
-function getP(btn){  
-  
-  const c=btn.closest(".card");  
-  
-  return{  
-    meta:c.dataset.meta,  
-    price:+c.dataset.price,  
-    img:c.dataset.img  
-  };  
-  
-}  
-  
-function addToCart(btn){  
-  
-  const p=getP(btn);  
-  
-  const x=cart.find(  
-    i=>  
-      i.price===p.price &&  
-      i.meta===p.meta &&  
-      i.img===p.img  
-  );  
-  
-  if(x){  
-  
-    x.qty++;  
-  
-  }else{  
-  
-    p.qty=1;  
-    cart.push(p);  
-  
-  }  
-  
-  renderCart();  
-  
-}  
-  
-function buyWA(btn){  
-  
-  const p=getP(btn);  
-  
-  let m=  
-`Holaa, quisiera comprar:  
-  
-Adjunta una captura del producto  
-`;  
-  
-  if(p.meta)  
-    m+=`${p.meta}\n`;  
-  
-  m+=`Precio: $${formatPrice(p.price)}`;  
-  
-  window.open(  
-    "https://wa.me/"+WA+  
-    "?text="+encodeURIComponent(m),  
-    "_blank"  
-  );  
-  
-}  
-  
-function toggleCart(){  
-  
-  document  
-    .getElementById("drawer")  
-    .classList.toggle("open");  
-  
-  renderCart();  
-  
-}  
-  
-function removeItem(i){  
-  
-  cart.splice(i,1);  
-  
-  renderCart();  
-  
-}  
-  
-function renderCart(){  
-  
-  document.getElementById("count").textContent=  
-    cart.reduce((s,x)=>s+x.qty,0);  
-  
-  const b=document.getElementById("items");  
-  
-  if(!cart.length){  
-  
-    b.innerHTML=  
-      '<p style="text-align:center;color:#777;margin-top:45px;font:15px Georgia,serif">Tu carrito está vacío ✨</p>';  
-  
-    document.getElementById("total").textContent="$0";  
-  
-    return;  
-  
-  }  
-  
-  b.innerHTML=cart.map((x,i)=>`  
-  
-<div class="item">  
-  
-${  
-x.img  
-?  
-`<img  
-src="${escapeHtml(x.img)}"  
-alt=""  
-style="width:58px;height:72px;object-fit:cover">`  
-:  
-`<div  
-style="width:58px;height:72px;background:#f6f4f7">  
-</div>`  
-}  
-  
-<div>  
-  
-${  
-x.meta  
-?  
-`<small>${escapeHtml(x.meta)}</small>`  
-:  
-""  
-}  
-  
-<small>  
-$${formatPrice(x.price)} × ${x.qty}  
-</small>  
-  
-</div>  
-  
-<button onclick="removeItem(${i})">  
-Quitar  
-</button>  
-  
-</div>  
-  
-`).join("");  
-  
-  document.getElementById("total").textContent=  
-    "$"+  
-    cart  
-      .reduce((s,x)=>s+x.price*x.qty,0)  
-      .toFixed(2);  
-  
-}  
-  
-function checkout(){  
-  
-  if(!cart.length)  
-    return;  
-  
-  const lines=cart.map(x=>{  
-  
-    let line=  
-`Adjunta una captura del producto`;  
-  
-    if(x.meta)  
-      line+=`\n${x.meta}`;  
-  
-    line+=  
-      `\nPrecio: $${formatPrice(x.price)} × ${x.qty}`;  
-  
-    return line;  
-  
-  }).join("\n\n");  
-  
-  const t=  
-    cart  
-      .reduce((s,x)=>s+x.price*x.qty,0)  
-      .toFixed(2);  
-  
-  const m=  
-`Holaa, quisiera realizar este pedido:  
-  
-${lines}  
-  
-Total: $${t}`;  
-  
-  window.open(  
-    "https://wa.me/"+WA+  
-    "?text="+encodeURIComponent(m),  
-    "_blank"  
-  );  
-  
-}  
-  
-loadProducts();  
-  
-setInterval(  
-  loadProducts,  
-  60000  
-);  
-  
-renderCart();  
-  
-</script>  </body>  
+</div>
+
+
+<main>
+
+<section id="ropa">
+
+<h2>Ropa</h2>
+
+<div class="grid" id="ropaGrid">
+<p class="empty">Cargando catálogo...</p>
+</div>
+
+</section>
+
+
+<section id="accesorios">
+
+<h2>Accesorios</h2>
+
+<div class="grid" id="accGrid">
+<p class="empty">Cargando catálogo...</p>
+</div>
+
+</section>
+
+</main>
+
+
+<aside id="drawer" class="drawer">
+
+<div class="drawer-head">
+
+<h3>Tu carrito</h3>
+
+<button onclick="toggleCart()">×</button>
+
+</div>
+
+<div id="items"></div>
+
+<div class="total">
+
+<span>Total</span>
+
+<strong id="total">$0</strong>
+
+</div>
+
+<button
+class="checkout"
+onclick="checkout()">
+Comprar por WhatsApp
+</button>
+
+</aside>
+
+
+<script>
+
+/* =========================
+   CONFIGURACIÓN
+========================= */
+
+const WA="584141323438";
+
+let products={
+  ropa:[],
+  accesorios:[]
+};
+
+let cart=[];
+
+
+/* =========================
+   AIRTABLE / PRODUCTOS
+========================= */
+
+async function loadProducts(){
+
+  try{
+
+    const r=
+      await fetch(
+        "/api/products",
+        {
+          cache:"no-store"
+        }
+      );
+
+
+    if(!r.ok)
+      throw new Error(
+        "No se pudo consultar Airtable"
+      );
+
+
+    products=
+      await r.json();
+
+
+    renderProducts();
+
+
+  }catch(e){
+
+    document.getElementById(
+      "ropaGrid"
+    ).innerHTML=
+      '<p class="empty">No se pudo cargar el catálogo.</p>';
+
+
+    document.getElementById(
+      "accGrid"
+    ).innerHTML=
+      '<p class="empty">No se pudo cargar el catálogo.</p>';
+
+
+    console.error(e);
+
+  }
+
+}
+
+
+function renderProducts(){
+
+  renderGrid(
+    "ropaGrid",
+    products.ropa||[]
+  );
+
+
+  renderGrid(
+    "accGrid",
+    products.accesorios||[]
+  );
+
+}
+
+
+/* =========================
+   GRID DE PRODUCTOS
+========================= */
+
+function renderGrid(id,arr){
+
+  /*
+    Disponible primero.
+    Agotado al final.
+  */
+
+  arr=[
+    ...arr
+  ].sort(
+    (a,b)=>{
+
+      const aSold=
+        Number(a.stock)>0
+          ?0
+          :1;
+
+      const bSold=
+        Number(b.stock)>0
+          ?0
+          :1;
+
+      return aSold-bSold;
+
+    }
+  );
+
+
+  const grid=
+    document.getElementById(id);
+
+
+  if(!arr.length){
+
+    grid.innerHTML=
+      '<p class="empty">No hay productos disponibles.</p>';
+
+    return;
+
+  }
+
+
+  grid.innerHTML=
+    arr.map(
+      p=>`
+
+<article
+class="card"
+data-meta="${escapeHtml(
+  Array.isArray(p.colors)
+    ?p.colors.join(", ")
+    :p.colors||""
+)}"
+data-price="${Number(p.price)||0}"
+data-img="${escapeHtml(p.image||"")}">
+
+
+${
+  p.image
+  ?
+  `<img
+    class="card-img"
+    src="${escapeHtml(p.image)}"
+    alt=""
+    loading="lazy"
+    onerror="this.style.display='none'">`
+  :
+  `<div class="card-img"></div>`
+}
+
+
+<div class="details">
+
+<div>
+
+${
+  p.type
+  ?
+  `<p>${escapeHtml(p.type)}</p>`
+  :
+  ""
+}
+
+
+${
+  Array.isArray(p.colors)&&p.colors.length
+  ?
+  `<p>Colores: ${escapeHtml(
+    p.colors.join(", ")
+  )}</p>`
+  :
+  ""
+}
+
+</div>
+
+
+<strong>
+$${formatPrice(p.price)}
+</strong>
+
+</div>
+
+
+<div
+class="status ${p.stock>0?"":"sold"}">
+
+${
+  p.stock>0
+    ?"DISPONIBLE"
+    :"AGOTADO"
+}
+
+</div>
+
+
+<div class="actions">
+
+<button
+${p.stock>0?"":"disabled"}
+onclick="addToCart(this)">
+
+${
+  p.stock>0
+    ?"Agregar al carrito"
+    :"Agotado"
+}
+
+</button>
+
+
+<button
+class="wa"
+${p.stock>0?"":"disabled"}
+onclick="buyWA(this)">
+
+WhatsApp
+
+</button>
+
+</div>
+
+
+</article>
+
+`
+    ).join("");
+
+}
+
+
+/* =========================
+   UTILIDADES
+========================= */
+
+function formatPrice(value){
+
+  const n=
+    Number(value)||0;
+
+
+  return Number.isInteger(n)
+    ?String(n)
+    :n.toFixed(2);
+
+}
+
+
+function escapeHtml(v){
+
+  return String(
+    v??""
+  ).replace(
+    /[&<>"']/g,
+    m=>({
+      "&":"&amp;",
+      "<":"&lt;",
+      ">":"&gt;",
+      '"':"&quot;",
+      "'":"&#039;"
+    }[m])
+  );
+
+}
+
+
+function getP(btn){
+
+  const c=
+    btn.closest(".card");
+
+
+  return{
+
+    meta:
+      c.dataset.meta,
+
+    price:
+      +c.dataset.price,
+
+    img:
+      c.dataset.img
+
+  };
+
+}
+
+
+/* =========================
+   CARRITO
+========================= */
+
+function addToCart(btn){
+
+  const p=
+    getP(btn);
+
+
+  const x=
+    cart.find(
+      i=>
+        i.price===p.price &&
+        i.meta===p.meta &&
+        i.img===p.img
+    );
+
+
+  if(x){
+
+    x.qty++;
+
+  }else{
+
+    p.qty=1;
+
+    cart.push(p);
+
+  }
+
+
+  renderCart();
+
+}
+
+
+function toggleCart(){
+
+  document
+    .getElementById("drawer")
+    .classList.toggle("open");
+
+
+  renderCart();
+
+}
+
+
+function removeItem(i){
+
+  cart.splice(i,1);
+
+  renderCart();
+
+}
+
+
+function renderCart(){
+
+  document.getElementById(
+    "count"
+  ).textContent=
+    cart.reduce(
+      (s,x)=>s+x.qty,
+      0
+    );
+
+
+  const b=
+    document.getElementById(
+      "items"
+    );
+
+
+  if(!cart.length){
+
+    b.innerHTML=
+      '<p style="text-align:center;color:#777;margin-top:45px;font:15px Georgia,serif">Tu carrito está vacío ✨</p>';
+
+
+    document.getElementById(
+      "total"
+    ).textContent="$0";
+
+
+    return;
+
+  }
+
+
+  b.innerHTML=
+    cart.map(
+      (x,i)=>`
+
+<div class="item">
+
+
+${
+  x.img
+  ?
+  `<img
+    src="${escapeHtml(x.img)}"
+    alt=""
+    style="width:58px;height:72px;object-fit:cover">`
+  :
+  `<div
+    style="width:58px;height:72px;background:#f6f4f7">
+  </div>`
+}
+
+
+<div>
+
+${
+  x.meta
+  ?
+  `<small>${escapeHtml(x.meta)}</small>`
+  :
+  ""
+}
+
+
+<small>
+$${formatPrice(x.price)} × ${x.qty}
+</small>
+
+</div>
+
+
+<button
+onclick="removeItem(${i})">
+
+Quitar
+
+</button>
+
+
+</div>
+
+`
+    ).join("");
+
+
+  document.getElementById(
+    "total"
+  ).textContent=
+    "$"+
+    cart
+      .reduce(
+        (s,x)=>
+          s+x.price*x.qty,
+        0
+      )
+      .toFixed(2);
+
+}
+
+
+/* =========================
+   MENSAJES
+========================= */
+
+function productMessage(p){
+
+  let m=
+`¡Hola! Quisiera comprar:
+
+Adjunta una captura del producto
+`;
+
+
+  if(p.meta)
+    m+=
+      `${p.meta}\n`;
+
+
+  m+=
+    `Precio: $${formatPrice(p.price)}`;
+
+
+  return m;
+
+}
+
+
+function cartMessage(){
+
+  const lines=
+    cart.map(
+      x=>{
+
+        let line=
+`Adjunta una captura del producto`;
+
+
+        if(x.meta)
+          line+=
+            `\n${x.meta}`;
+
+
+        line+=
+          `\nPrecio: $${formatPrice(x.price)} × ${x.qty}`;
+
+
+        return line;
+
+      }
+    ).join("\n\n");
+
+
+  const t=
+    cart
+      .reduce(
+        (s,x)=>
+          s+x.price*x.qty,
+        0
+      )
+      .toFixed(2);
+
+
+  return `¡Hola! Quisiera realizar este pedido:
+
+${lines}
+
+Total: $${t}`;
+
+}
+
+
+/* =========================
+   WHATSAPP
+========================= */
+
+function openWhatsApp(message){
+
+  window.open(
+    "https://wa.me/"+
+    WA+
+    "?text="+
+    encodeURIComponent(message),
+    "_blank"
+  );
+
+}
+
+
+/* =========================
+   COMPRAR PRODUCTO
+========================= */
+
+function buyWA(btn){
+
+  const p=
+    getP(btn);
+
+
+  const message=
+    productMessage(p);
+
+
+  openWhatsApp(message);
+
+}
+
+
+/* =========================
+   CHECKOUT DEL CARRITO
+========================= */
+
+function checkout(){
+
+  if(!cart.length)
+    return;
+
+
+  const message=
+    cartMessage();
+
+
+  openWhatsApp(message);
+
+}
+
+
+/* =========================
+   INICIAR
+========================= */
+
+loadProducts();
+
+setInterval(
+  loadProducts,
+  60000
+);
+
+renderCart();
+
+</script>
+
+</body>
 </html>

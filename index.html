@@ -123,14 +123,6 @@ h2{
   min-width:0
 }
 
-.card img{
-  width:100%;
-  aspect-ratio:3/4;
-  object-fit:cover;
-  background:#f6f4f7;
-  display:block
-}
-
 .card-img{
   width:100%;
   aspect-ratio:3/4;
@@ -356,6 +348,7 @@ h3{
 <body>
 
 <header>
+
 <nav>
 
 <button onclick="document.getElementById('ropa').scrollIntoView({behavior:'smooth'})">
@@ -380,7 +373,9 @@ rel="noopener">
 </button>
 
 </nav>
+
 </header>
+
 
 <div class="hero">
 
@@ -394,6 +389,7 @@ onerror="this.style.display='none'">
 
 </div>
 
+
 <main>
 
 <section id="ropa">
@@ -406,6 +402,7 @@ onerror="this.style.display='none'">
 
 </section>
 
+
 <section id="accesorios">
 
 <h2>Accesorios</h2>
@@ -417,6 +414,7 @@ onerror="this.style.display='none'">
 </section>
 
 </main>
+
 
 <aside id="drawer" class="drawer">
 
@@ -431,17 +429,27 @@ onerror="this.style.display='none'">
 <div id="items"></div>
 
 <div class="total">
+
 <span>Total</span>
+
 <strong id="total">$0</strong>
+
 </div>
 
-<button class="checkout" onclick="checkout()">
+<button
+class="checkout"
+onclick="checkout()">
 Comprar por WhatsApp
 </button>
 
 </aside>
 
+
 <script>
+
+/* =========================
+   CONFIGURACIÓN
+========================= */
 
 const WA="584141323438";
 
@@ -457,153 +465,225 @@ let cart=[];
    ARCHIVOS DE IMAGEN
 ========================= */
 
+/*
+  Aquí guardamos las imágenes que ya
+  conseguimos convertir en archivos.
+*/
+
 const imageFiles=new Map();
 
 
 /*
-  Prepara una imagen como archivo real
-  antes de que el usuario pulse WhatsApp.
+  Convierte una imagen del catálogo
+  en un archivo utilizando el nuevo
+  proxy de Cloudflare:
+
+  /api/image?url=...
 */
 
-function prepareImage(url){
+async function prepareImage(url,index=0){
 
   if(!url)
-    return;
+    return null;
 
   if(imageFiles.has(url))
-    return;
+    return imageFiles.get(url);
 
-  const img=new Image();
 
-  /*
-    Esto permite que el navegador intente
-    utilizar la imagen desde otro dominio
-    sin bloquear el canvas cuando el servidor
-    de la imagen permite CORS.
-  */
+  try{
 
-  img.crossOrigin="anonymous";
+    /*
+      MUY IMPORTANTE:
 
-  img.onload=function(){
+      La imagen ya no se descarga directamente
+      desde Airtable.
 
-    try{
+      Primero pasa por nuestro Worker.
+    */
 
-      const canvas=document.createElement("canvas");
+    const proxyUrl=
+      "/api/image?url="+
+      encodeURIComponent(url);
 
-      canvas.width=img.naturalWidth;
-      canvas.height=img.naturalHeight;
 
-      const ctx=canvas.getContext("2d");
+    const response=
+      await fetch(proxyUrl,{
+        cache:"force-cache"
+      });
 
-      ctx.drawImage(
-        img,
-        0,
-        0
-      );
 
-      canvas.toBlob(function(blob){
-
-        if(!blob)
-          return;
-
-        const file=new File(
-          [blob],
-          "encante-producto.jpg",
-          {
-            type:"image/jpeg"
-          }
-        );
-
-        imageFiles.set(
-          url,
-          file
-        );
-
-      },"image/jpeg",0.92);
-
-    }catch(error){
+    if(!response.ok){
 
       console.warn(
-        "No se pudo preparar la imagen:",
-        error
+        "No se pudo obtener la imagen mediante el proxy."
       );
+
+      return null;
 
     }
 
-  };
 
-  img.onerror=function(){
+    const blob=
+      await response.blob();
 
-    console.warn(
-      "No se pudo cargar la imagen para compartir:",
-      url
+
+    if(!blob){
+
+      return null;
+
+    }
+
+
+    let type=
+      blob.type ||
+      "image/jpeg";
+
+
+    if(!type.startsWith("image/")){
+
+      type="image/jpeg";
+
+    }
+
+
+    let extension="jpg";
+
+
+    if(type.includes("png"))
+      extension="png";
+
+    else if(type.includes("webp"))
+      extension="webp";
+
+    else if(type.includes("gif"))
+      extension="gif";
+
+
+    const file=
+      new File(
+        [blob],
+        `encante-producto-${index+1}.${extension}`,
+        {
+          type:type
+        }
+      );
+
+
+    imageFiles.set(
+      url,
+      file
     );
 
-  };
 
-  img.src=url;
+    return file;
+
+
+  }catch(error){
+
+    console.warn(
+      "No se pudo preparar la imagen:",
+      error
+    );
+
+    return null;
+
+  }
 
 }
 
 
 /*
-  Preparamos las imágenes después de
-  cargar los productos.
+  Prepara todas las imágenes
+  después de cargar el catálogo.
 */
 
-function prepareAllImages(){
+async function prepareAllImages(){
 
   const all=[
     ...(products.ropa||[]),
     ...(products.accesorios||[])
   ];
 
-  all.forEach(p=>{
 
-    if(p.image)
-      prepareImage(p.image);
+  /*
+    Las preparamos una por una para
+    no hacer demasiadas solicitudes
+    simultáneas.
+  */
 
-  });
+  for(
+    let i=0;
+    i<all.length;
+    i++
+  ){
+
+    const p=all[i];
+
+    if(p.image){
+
+      await prepareImage(
+        p.image,
+        i
+      );
+
+    }
+
+  }
 
 }
 
 
 /* =========================
-   CARGAR PRODUCTOS
+   AIRTABLE / PRODUCTOS
 ========================= */
 
 async function loadProducts(){
 
   try{
 
-    const r=await fetch(
-      "/api/products",
-      {cache:"no-store"}
-    );
+    const r=
+      await fetch(
+        "/api/products",
+        {
+          cache:"no-store"
+        }
+      );
+
 
     if(!r.ok)
       throw new Error(
         "No se pudo consultar Airtable"
       );
 
-    products=await r.json();
+
+    products=
+      await r.json();
+
 
     renderProducts();
 
+
     /*
-      Empezamos a preparar las imágenes
-      inmediatamente después de cargarlas.
+      Ahora que ya tenemos los productos,
+      empezamos a preparar sus imágenes.
     */
 
     prepareAllImages();
 
+
   }catch(e){
 
-    document.getElementById("ropaGrid").innerHTML=
+    document.getElementById(
+      "ropaGrid"
+    ).innerHTML=
       '<p class="empty">No se pudo cargar el catálogo.</p>';
 
-    document.getElementById("accGrid").innerHTML=
+
+    document.getElementById(
+      "accGrid"
+    ).innerHTML=
       '<p class="empty">No se pudo cargar el catálogo.</p>';
+
 
     console.error(e);
 
@@ -619,6 +699,7 @@ function renderProducts(){
     products.ropa||[]
   );
 
+
   renderGrid(
     "accGrid",
     products.accesorios||[]
@@ -628,24 +709,40 @@ function renderProducts(){
 
 
 /* =========================
-   MOSTRAR PRODUCTOS
+   GRID DE PRODUCTOS
 ========================= */
 
 function renderGrid(id,arr){
 
-  arr=[...arr].sort((a,b)=>{
+  /*
+    Disponible primero.
+    Agotado al final.
+  */
 
-    const aSold=
-      Number(a.stock)>0?0:1;
+  arr=[
+    ...arr
+  ].sort(
+    (a,b)=>{
 
-    const bSold=
-      Number(b.stock)>0?0:1;
+      const aSold=
+        Number(a.stock)>0
+          ?0
+          :1;
 
-    return aSold-bSold;
+      const bSold=
+        Number(b.stock)>0
+          ?0
+          :1;
 
-  });
+      return aSold-bSold;
 
-  const grid=document.getElementById(id);
+    }
+  );
+
+
+  const grid=
+    document.getElementById(id);
+
 
   if(!arr.length){
 
@@ -656,54 +753,61 @@ function renderGrid(id,arr){
 
   }
 
-  grid.innerHTML=arr.map(p=>`
+
+  grid.innerHTML=
+    arr.map(
+      p=>`
 
 <article
 class="card"
 data-meta="${escapeHtml(
   Array.isArray(p.colors)
-    ? p.colors.join(", ")
-    : p.colors||""
+    ?p.colors.join(", ")
+    :p.colors||""
 )}"
 data-price="${Number(p.price)||0}"
 data-img="${escapeHtml(p.image||"")}">
 
+
 ${
-p.image
-?
-`<img
-class="card-img"
-src="${escapeHtml(p.image)}"
-alt=""
-loading="lazy"
-onerror="this.style.display='none'">`
-:
-`<div class="card-img"></div>`
+  p.image
+  ?
+  `<img
+    class="card-img"
+    src="${escapeHtml(p.image)}"
+    alt=""
+    loading="lazy"
+    onerror="this.style.display='none'">`
+  :
+  `<div class="card-img"></div>`
 }
+
 
 <div class="details">
 
 <div>
 
 ${
-p.type
-?
-`<p>${escapeHtml(p.type)}</p>`
-:
-""
+  p.type
+  ?
+  `<p>${escapeHtml(p.type)}</p>`
+  :
+  ""
 }
 
+
 ${
-Array.isArray(p.colors)&&p.colors.length
-?
-`<p>Colores: ${escapeHtml(
-  p.colors.join(", ")
-)}</p>`
-:
-""
+  Array.isArray(p.colors)&&p.colors.length
+  ?
+  `<p>Colores: ${escapeHtml(
+    p.colors.join(", ")
+  )}</p>`
+  :
+  ""
 }
 
 </div>
+
 
 <strong>
 $${formatPrice(p.price)}
@@ -711,11 +815,18 @@ $${formatPrice(p.price)}
 
 </div>
 
-<div class="status ${p.stock>0?"":"sold"}">
 
-${p.stock>0?"DISPONIBLE":"AGOTADO"}
+<div
+class="status ${p.stock>0?"":"sold"}">
+
+${
+  p.stock>0
+    ?"DISPONIBLE"
+    :"AGOTADO"
+}
 
 </div>
+
 
 <div class="actions">
 
@@ -723,9 +834,14 @@ ${p.stock>0?"DISPONIBLE":"AGOTADO"}
 ${p.stock>0?"":"disabled"}
 onclick="addToCart(this)">
 
-${p.stock>0?"Agregar al carrito":"Agotado"}
+${
+  p.stock>0
+    ?"Agregar al carrito"
+    :"Agotado"
+}
 
 </button>
+
 
 <button
 class="wa"
@@ -738,9 +854,11 @@ WhatsApp
 
 </div>
 
+
 </article>
 
-`).join("");
+`
+    ).join("");
 
 }
 
@@ -751,18 +869,22 @@ WhatsApp
 
 function formatPrice(value){
 
-  const n=Number(value)||0;
+  const n=
+    Number(value)||0;
+
 
   return Number.isInteger(n)
-    ? String(n)
-    : n.toFixed(2);
+    ?String(n)
+    :n.toFixed(2);
 
 }
 
 
 function escapeHtml(v){
 
-  return String(v??"").replace(
+  return String(
+    v??""
+  ).replace(
     /[&<>"']/g,
     m=>({
       "&":"&amp;",
@@ -778,12 +900,21 @@ function escapeHtml(v){
 
 function getP(btn){
 
-  const c=btn.closest(".card");
+  const c=
+    btn.closest(".card");
+
 
   return{
-    meta:c.dataset.meta,
-    price:+c.dataset.price,
-    img:c.dataset.img
+
+    meta:
+      c.dataset.meta,
+
+    price:
+      +c.dataset.price,
+
+    img:
+      c.dataset.img
+
   };
 
 }
@@ -795,14 +926,18 @@ function getP(btn){
 
 function addToCart(btn){
 
-  const p=getP(btn);
+  const p=
+    getP(btn);
 
-  const x=cart.find(
-    i=>
-      i.price===p.price &&
-      i.meta===p.meta &&
-      i.img===p.img
-  );
+
+  const x=
+    cart.find(
+      i=>
+        i.price===p.price &&
+        i.meta===p.meta &&
+        i.img===p.img
+    );
+
 
   if(x){
 
@@ -811,17 +946,20 @@ function addToCart(btn){
   }else{
 
     p.qty=1;
+
     cart.push(p);
 
   }
 
+
   /*
-    Si la imagen todavía no está preparada,
-    comenzamos a prepararla.
+    También empezamos a preparar
+    la imagen cuando entra al carrito.
   */
 
   if(p.img)
     prepareImage(p.img);
+
 
   renderCart();
 
@@ -833,6 +971,7 @@ function toggleCart(){
   document
     .getElementById("drawer")
     .classList.toggle("open");
+
 
   renderCart();
 
@@ -850,53 +989,68 @@ function removeItem(i){
 
 function renderCart(){
 
-  document.getElementById("count").textContent=
+  document.getElementById(
+    "count"
+  ).textContent=
     cart.reduce(
       (s,x)=>s+x.qty,
       0
     );
 
+
   const b=
-    document.getElementById("items");
+    document.getElementById(
+      "items"
+    );
+
 
   if(!cart.length){
 
     b.innerHTML=
       '<p style="text-align:center;color:#777;margin-top:45px;font:15px Georgia,serif">Tu carrito está vacío ✨</p>';
 
-    document.getElementById("total")
-      .textContent="$0";
+
+    document.getElementById(
+      "total"
+    ).textContent="$0";
+
 
     return;
 
   }
 
-  b.innerHTML=cart.map((x,i)=>`
+
+  b.innerHTML=
+    cart.map(
+      (x,i)=>`
 
 <div class="item">
 
+
 ${
-x.img
-?
-`<img
-src="${escapeHtml(x.img)}"
-alt=""
-style="width:58px;height:72px;object-fit:cover">`
-:
-`<div
-style="width:58px;height:72px;background:#f6f4f7">
-</div>`
+  x.img
+  ?
+  `<img
+    src="${escapeHtml(x.img)}"
+    alt=""
+    style="width:58px;height:72px;object-fit:cover">`
+  :
+  `<div
+    style="width:58px;height:72px;background:#f6f4f7">
+  </div>`
 }
+
 
 <div>
 
 ${
-x.meta
-?
-`<small>${escapeHtml(x.meta)}</small>`
-:
-""
+  x.meta
+  ?
+  `<small>${escapeHtml(x.meta)}</small>`
+  :
+  ""
 }
+
 
 <small>
 $${formatPrice(x.price)} × ${x.qty}
@@ -904,23 +1058,32 @@ $${formatPrice(x.price)} × ${x.qty}
 
 </div>
 
-<button onclick="removeItem(${i})">
+
+<button
+onclick="removeItem(${i})">
+
 Quitar
+
 </button>
+
 
 </div>
 
-`).join("");
+`
+    ).join("");
 
-  document.getElementById("total")
-    .textContent=
-      "$"+
-      cart
-        .reduce(
-          (s,x)=>s+x.price*x.qty,
-          0
-        )
-        .toFixed(2);
+
+  document.getElementById(
+    "total"
+  ).textContent=
+    "$"+
+    cart
+      .reduce(
+        (s,x)=>
+          s+x.price*x.qty,
+        0
+      )
+      .toFixed(2);
 
 }
 
@@ -936,11 +1099,15 @@ function productMessage(p){
 
 `;
 
+
   if(p.meta)
-    m+=`${p.meta}\n`;
+    m+=
+      `${p.meta}\n`;
+
 
   m+=
     `Precio: $${formatPrice(p.price)}`;
+
 
   return m;
 
@@ -950,27 +1117,36 @@ function productMessage(p){
 function cartMessage(){
 
   const lines=
-    cart.map(x=>{
+    cart.map(
+      x=>{
 
-      let line="";
+        let line="";
 
-      if(x.meta)
-        line+=`${x.meta}\n`;
 
-      line+=
-        `Precio: $${formatPrice(x.price)} × ${x.qty}`;
+        if(x.meta)
+          line+=
+            `${x.meta}\n`;
 
-      return line;
 
-    }).join("\n\n");
+        line+=
+          `Precio: $${formatPrice(x.price)} × ${x.qty}`;
+
+
+        return line;
+
+      }
+    ).join("\n\n");
+
 
   const t=
     cart
       .reduce(
-        (s,x)=>s+x.price*x.qty,
+        (s,x)=>
+          s+x.price*x.qty,
         0
       )
       .toFixed(2);
+
 
   return `Holaa, quisiera realizar este pedido:
 
@@ -982,13 +1158,14 @@ Total: $${t}`;
 
 
 /* =========================
-   RESPALDO WHATSAPP
+   WHATSAPP NORMAL
 ========================= */
 
 function openWhatsAppFallback(message){
 
   window.open(
-    "https://wa.me/"+WA+
+    "https://wa.me/"+
+    WA+
     "?text="+
     encodeURIComponent(message),
     "_blank"
@@ -998,24 +1175,44 @@ function openWhatsAppFallback(message){
 
 
 /* =========================
-   COMPARTIR PRODUCTO
+   COMPRAR PRODUCTO
 ========================= */
 
 async function buyWA(btn){
 
-  const p=getP(btn);
+  const p=
+    getP(btn);
+
 
   const message=
     productMessage(p);
 
+
   /*
-    La imagen debería estar preparada
-    desde antes del clic.
+    Intentamos utilizar el archivo
+    que el catálogo ya preparó.
   */
 
-  const file=
+  let file=
     imageFiles.get(p.img);
 
+
+  /*
+    Si todavía no está listo, hacemos
+    un último intento mediante el proxy.
+  */
+
+  if(!file && p.img){
+
+    file=
+      await prepareImage(p.img);
+
+  }
+
+
+  /*
+    Compartir imagen real.
+  */
 
   if(
     file &&
@@ -1026,10 +1223,15 @@ async function buyWA(btn){
     try{
 
       const shareData={
+
         files:[file],
+
         text:message,
+
         title:"Encante"
+
       };
+
 
       if(
         navigator.canShare({
@@ -1047,11 +1249,6 @@ async function buyWA(btn){
 
     }catch(error){
 
-      /*
-        Si la persona cancela el menú,
-        no abrimos WhatsApp automáticamente.
-      */
-
       if(
         error &&
         error.name==="AbortError"
@@ -1060,6 +1257,7 @@ async function buyWA(btn){
         return;
 
       }
+
 
       console.warn(
         "No se pudo compartir la imagen:",
@@ -1073,7 +1271,7 @@ async function buyWA(btn){
 
   /*
     RESPALDO:
-    WhatsApp con indicación de captura.
+    abre WhatsApp con el mensaje.
   */
 
   const fallbackMessage=
@@ -1081,6 +1279,7 @@ async function buyWA(btn){
 
 Adjunta una captura del producto
 ${p.meta ? p.meta+"\n" : ""}Precio: $${formatPrice(p.price)}`;
+
 
   openWhatsAppFallback(
     fallbackMessage
@@ -1090,7 +1289,7 @@ ${p.meta ? p.meta+"\n" : ""}Precio: $${formatPrice(p.price)}`;
 
 
 /* =========================
-   COMPARTIR CARRITO
+   CHECKOUT DEL CARRITO
 ========================= */
 
 async function checkout(){
@@ -1098,31 +1297,55 @@ async function checkout(){
   if(!cart.length)
     return;
 
+
   const message=
     cartMessage();
 
 
-  /*
-    Buscamos todas las imágenes
-    que ya estén preparadas.
-  */
-
   const files=[];
 
-  cart.forEach((x,i)=>{
 
-    const file=
+  /*
+    Intentamos tener todas las imágenes.
+  */
+
+  for(
+    let i=0;
+    i<cart.length;
+    i++
+  ){
+
+    const x=
+      cart[i];
+
+
+    let file=
       imageFiles.get(x.img);
 
-    if(file)
+
+    if(!file && x.img){
+
+      file=
+        await prepareImage(
+          x.img,
+          i
+        );
+
+    }
+
+
+    if(file){
+
       files.push(file);
 
-  });
+    }
+
+  }
 
 
   /*
-    Solo compartimos como archivos si
-    tenemos todas las imágenes.
+    Si tenemos TODAS las imágenes,
+    intentamos compartirlas juntas.
   */
 
   if(
@@ -1149,6 +1372,7 @@ async function checkout(){
 
         });
 
+
         return;
 
       }
@@ -1164,6 +1388,7 @@ async function checkout(){
 
       }
 
+
       console.warn(
         "No se pudo compartir el carrito:",
         error
@@ -1175,32 +1400,41 @@ async function checkout(){
 
 
   /*
-    RESPALDO DEL CARRITO
+    RESPALDO DEL CARRITO.
   */
 
   const lines=
-    cart.map(x=>{
+    cart.map(
+      x=>{
 
-      let line=
+        let line=
 `Adjunta una captura del producto`;
 
-      if(x.meta)
-        line+=`\n${x.meta}`;
 
-      line+=
-        `\nPrecio: $${formatPrice(x.price)} × ${x.qty}`;
+        if(x.meta)
+          line+=
+            `\n${x.meta}`;
 
-      return line;
 
-    }).join("\n\n");
+        line+=
+          `\nPrecio: $${formatPrice(x.price)} × ${x.qty}`;
+
+
+        return line;
+
+      }
+    ).join("\n\n");
+
 
   const t=
     cart
       .reduce(
-        (s,x)=>s+x.price*x.qty,
+        (s,x)=>
+          s+x.price*x.qty,
         0
       )
       .toFixed(2);
+
 
   const fallbackMessage=
 `Holaa, quisiera realizar este pedido:
@@ -1208,6 +1442,7 @@ async function checkout(){
 ${lines}
 
 Total: $${t}`;
+
 
   openWhatsAppFallback(
     fallbackMessage
@@ -1217,7 +1452,7 @@ Total: $${t}`;
 
 
 /* =========================
-   INICIO
+   INICIAR
 ========================= */
 
 loadProducts();
@@ -1232,4 +1467,4 @@ renderCart();
 </script>
 
 </body>
-</html>
+  </html>

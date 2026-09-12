@@ -357,6 +357,7 @@ h3{
 
 <header>
 <nav>
+
 <button onclick="document.getElementById('ropa').scrollIntoView({behavior:'smooth'})">
 Ropa
 </button>
@@ -451,6 +452,11 @@ let products={
 
 let cart=[];
 
+
+/* =========================
+   CARGAR PRODUCTOS
+========================= */
+
 async function loadProducts(){
 
   try{
@@ -478,6 +484,7 @@ async function loadProducts(){
 
 }
 
+
 function renderProducts(){
 
   renderGrid(
@@ -491,6 +498,11 @@ function renderProducts(){
   );
 
 }
+
+
+/* =========================
+   MOSTRAR PRODUCTOS
+========================= */
 
 function renderGrid(id,arr){
 
@@ -600,6 +612,11 @@ WhatsApp
 
 }
 
+
+/* =========================
+   UTILIDADES
+========================= */
+
 function formatPrice(value){
 
   const n=Number(value)||0;
@@ -609,6 +626,7 @@ function formatPrice(value){
     : n.toFixed(2);
 
 }
+
 
 function escapeHtml(v){
 
@@ -625,6 +643,7 @@ function escapeHtml(v){
 
 }
 
+
 function getP(btn){
 
   const c=btn.closest(".card");
@@ -636,6 +655,11 @@ function getP(btn){
   };
 
 }
+
+
+/* =========================
+   CARRITO
+========================= */
 
 function addToCart(btn){
 
@@ -663,28 +687,6 @@ function addToCart(btn){
 
 }
 
-function buyWA(btn){
-
-  const p=getP(btn);
-
-  let m=
-`Holaa, quisiera comprar:
-
-Adjunta una captura del producto
-`;
-
-  if(p.meta)
-    m+=`${p.meta}\n`;
-
-  m+=`Precio: $${formatPrice(p.price)}`;
-
-  window.open(
-    "https://wa.me/"+WA+
-    "?text="+encodeURIComponent(m),
-    "_blank"
-  );
-
-}
 
 function toggleCart(){
 
@@ -696,6 +698,7 @@ function toggleCart(){
 
 }
 
+
 function removeItem(i){
 
   cart.splice(i,1);
@@ -703,6 +706,7 @@ function removeItem(i){
   renderCart();
 
 }
+
 
 function renderCart(){
 
@@ -771,10 +775,287 @@ Quitar
 
 }
 
-function checkout(){
+
+/* =========================
+   TEXTO WHATSAPP
+========================= */
+
+function productMessage(p){
+
+  let m=
+`Holaa, quisiera comprar:
+
+`;
+
+  if(p.meta)
+    m+=`${p.meta}\n`;
+
+  m+=`Precio: $${formatPrice(p.price)}`;
+
+  return m;
+
+}
+
+
+function cartMessage(){
+
+  const lines=cart.map(x=>{
+
+    let line="";
+
+    if(x.meta)
+      line+=`${x.meta}\n`;
+
+    line+=
+      `Precio: $${formatPrice(x.price)} × ${x.qty}`;
+
+    return line;
+
+  }).join("\n\n");
+
+  const t=
+    cart
+      .reduce((s,x)=>s+x.price*x.qty,0)
+      .toFixed(2);
+
+  return `Holaa, quisiera realizar este pedido:
+
+${lines}
+
+Total: $${t}`;
+
+}
+
+
+/* =========================
+   COMPARTIR IMAGEN REAL
+========================= */
+
+async function getImageFile(url,index=0){
+
+  if(!url)
+    return null;
+
+  try{
+
+    const response=await fetch(url);
+
+    if(!response.ok)
+      return null;
+
+    const blob=await response.blob();
+
+    let type=blob.type||"image/jpeg";
+
+    if(!type.startsWith("image/"))
+      type="image/jpeg";
+
+    let extension="jpg";
+
+    if(type.includes("png"))
+      extension="png";
+    else if(type.includes("webp"))
+      extension="webp";
+    else if(type.includes("gif"))
+      extension="gif";
+
+    return new File(
+      [blob],
+      `encante-producto-${index+1}.${extension}`,
+      {type}
+    );
+
+  }catch(error){
+
+    console.error(
+      "No se pudo preparar la imagen:",
+      error
+    );
+
+    return null;
+
+  }
+
+}
+
+
+/* =========================
+   COMPARTIR PRODUCTO
+========================= */
+
+async function buyWA(btn){
+
+  const p=getP(btn);
+
+  const message=productMessage(p);
+
+  /*
+    Primero comprobamos si el navegador
+    soporta compartir archivos.
+  */
+
+  if(
+    navigator.share &&
+    navigator.canShare
+  ){
+
+    try{
+
+      const file=await getImageFile(p.img);
+
+      if(
+        file &&
+        navigator.canShare({
+          files:[file]
+        })
+      ){
+
+        await navigator.share({
+
+          files:[file],
+
+          text:message,
+
+          title:"Encante"
+
+        });
+
+        return;
+
+      }
+
+    }catch(error){
+
+      /*
+        Si la persona cancela el menú
+        de compartir, no hacemos nada.
+
+        Si simplemente no se puede compartir,
+        seguimos con el respaldo.
+      */
+
+      if(error?.name==="AbortError")
+        return;
+
+      console.warn(
+        "Compartir imagen no disponible:",
+        error
+      );
+
+    }
+
+  }
+
+
+  /*
+    RESPALDO:
+    WhatsApp normal con instrucción
+    para adjuntar captura.
+  */
+
+  const fallbackMessage=
+`Holaa, quisiera comprar:
+
+Adjunta una captura del producto
+${p.meta ? p.meta+"\n" : ""}Precio: $${formatPrice(p.price)}`;
+
+  window.open(
+    "https://wa.me/"+WA+
+    "?text="+encodeURIComponent(fallbackMessage),
+    "_blank"
+  );
+
+}
+
+
+/* =========================
+   COMPARTIR CARRITO
+========================= */
+
+async function checkout(){
 
   if(!cart.length)
     return;
+
+
+  const message=cartMessage();
+
+
+  /*
+    Intentamos preparar todas las imágenes.
+  */
+
+  if(
+    navigator.share &&
+    navigator.canShare
+  ){
+
+    try{
+
+      const files=[];
+
+      for(
+        let i=0;
+        i<cart.length;
+        i++
+      ){
+
+        const file=
+          await getImageFile(
+            cart[i].img,
+            i
+          );
+
+        if(file)
+          files.push(file);
+
+      }
+
+
+      /*
+        Solo intentamos compartir como archivos
+        si logramos obtener todas las imágenes.
+      */
+
+      if(
+        files.length===cart.length &&
+        navigator.canShare({
+          files:files
+        })
+      ){
+
+        await navigator.share({
+
+          files:files,
+
+          text:message,
+
+          title:"Pedido Encante"
+
+        });
+
+        return;
+
+      }
+
+    }catch(error){
+
+      if(error?.name==="AbortError")
+        return;
+
+      console.warn(
+        "No se pudo compartir el carrito:",
+        error
+      );
+
+    }
+
+  }
+
+
+  /*
+    RESPALDO DEL CARRITO
+  */
 
   const lines=cart.map(x=>{
 
@@ -793,23 +1074,32 @@ function checkout(){
 
   const t=
     cart
-      .reduce((s,x)=>s+x.price*x.qty,0)
+      .reduce(
+        (s,x)=>s+x.price*x.qty,
+        0
+      )
       .toFixed(2);
 
-  const m=
+  const fallbackMessage=
 `Holaa, quisiera realizar este pedido:
 
 ${lines}
 
 Total: $${t}`;
 
+
   window.open(
     "https://wa.me/"+WA+
-    "?text="+encodeURIComponent(m),
+    "?text="+encodeURIComponent(fallbackMessage),
     "_blank"
   );
 
 }
+
+
+/* =========================
+   INICIAR
+========================= */
 
 loadProducts();
 
